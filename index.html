@@ -37,8 +37,9 @@
       font-weight: 700;
       color: #1f2937;
       margin-bottom: 12px;
+      text-align: center;
     }
-    
+
     body.dark-mode .header h1 { color: #f3f4f6; }
     
     .btn-group { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -110,6 +111,7 @@
       padding: 12px;
       margin-bottom: 10px;
       background: #fafafa;
+      transition: border-color 0.15s, box-shadow 0.15s;
     }
     
     body.dark-mode .entry-card {
@@ -143,6 +145,11 @@
     }
     
     body.dark-mode .entry-actions { border-top-color: #4b5563; }
+
+    .entry-card:hover {
+      border-color: #2563eb;
+      box-shadow: 0 1px 4px rgba(37,99,235,0.15);
+    }
     
     /* Messages */
     .message {
@@ -575,7 +582,18 @@
       if (confirm('Delete this entry?')) {
         state.entries = state.entries.filter(e => e.id !== id);
         saveEntries();
+        state.view = 'list';
         showMessage('Entry deleted');
+      }
+    }
+
+    // View entry detail
+    function viewEntry(id) {
+      const entry = state.entries.find(e => e.id === id);
+      if (entry) {
+        state.viewingEntry = entry;
+        state.view = 'detail';
+        render();
       }
     }
     
@@ -971,9 +989,6 @@
               <div class="header">
                 <h1>Before/After Comparison</h1>
                 <div class="btn-group">
-                  <button class="btn btn-dark btn-icon" onclick="toggleDarkMode()">
-                    ${state.darkMode ? '☀️' : '🌙'}
-                  </button>
                   <button class="btn btn-secondary" onclick="toggleComparison()">
                     ← Back to List
                   </button>
@@ -1033,11 +1048,8 @@
           <div class="container">
             <div class="card">
               <div class="header">
-                <h1>Child Documentation</h1>
-                <div class="btn-group">
-                  <button class="btn btn-dark btn-icon" onclick="toggleDarkMode()" title="Toggle dark mode">
-                    ${state.darkMode ? '☀️' : '🌙'}
-                  </button>
+                <h1 ondblclick="toggleDarkMode()">Child Documentation</h1>
+                <div class="btn-group" style="justify-content: center;">
                   <button class="btn btn-purple" onclick="toggleComparison()">
                     🔄 Compare
                   </button>
@@ -1060,22 +1072,14 @@
               ` : `
                 <div>
                   ${state.entries.slice().reverse().map(entry => `
-                    <div class="entry-card">
+                    <div class="entry-card" onclick="viewEntry(${entry.id})" style="cursor: pointer;">
                       <div class="entry-header">
-                        <div class="entry-title">#${entry.entryNumber} - ${entry.child}</div>
+                        <div class="entry-title">${entry.child}</div>
                         <div class="entry-meta">${entry.date} • ${entry.context}</div>
                         ${entry.quickNotes ? `<div class="entry-meta" style="font-style: italic; margin-top: 4px;">${entry.quickNotes.substring(0, 80)}${entry.quickNotes.length > 80 ? '...' : ''}</div>` : ''}
                         <div class="entry-meta" style="margin-top: 4px;">
                           📊 ${entry.observations.length} observations • 📷 ${entry.photos.length} photos
                         </div>
-                      </div>
-                      <div class="entry-actions">
-                        <button class="btn btn-success" onclick="exportEntry(${entry.id})" style="flex: 1;">
-                          📤 Export
-                        </button>
-                        <button class="btn btn-danger" onclick="deleteEntry(${entry.id})" style="flex: 1;">
-                          🗑️ Delete
-                        </button>
                       </div>
                     </div>
                   `).join('')}
@@ -1087,6 +1091,102 @@
         return;
       }
       
+      // Detail view
+      if (state.view === 'detail' && state.viewingEntry) {
+        const entry = state.viewingEntry;
+        const calculatedAge = entry.child && childDOBs[entry.child] ?
+          calculateAge(childDOBs[entry.child], entry.date) : '';
+
+        app.innerHTML = `
+          <div class="container">
+            <div class="card">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <button class="btn btn-secondary" onclick="state.view='list'; render();" style="flex: 0;">
+                  ← Back
+                </button>
+                <h1 style="font-size: 20px; flex: 1; text-align: center;">${entry.child}</h1>
+                <div style="flex: 0; min-width: 70px;"></div>
+              </div>
+
+              <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px;">
+                <span style="background: #eff6ff; color: #1e40af; padding: 4px 12px; border-radius: 16px; font-size: 13px; font-weight: 500;">${entry.date}</span>
+                <span style="background: #f0fdf4; color: #166534; padding: 4px 12px; border-radius: 16px; font-size: 13px; font-weight: 500;">${entry.context}${entry.contextOther ? ' (' + entry.contextOther + ')' : ''}</span>
+                ${calculatedAge ? `<span style="background: #fef3c7; color: #92400e; padding: 4px 12px; border-radius: 16px; font-size: 13px; font-weight: 500;">Age: ${calculatedAge}</span>` : ''}
+              </div>
+
+              ${entry.quickNotes ? `
+                <div class="quick-notes-section">
+                  <strong style="font-size: 13px;">Quick Notes:</strong>
+                  <div style="margin-top: 4px;">${entry.quickNotes}</div>
+                </div>
+              ` : ''}
+
+              <div style="margin-bottom: 16px;">
+                <div class="entry-meta"><strong>Location:</strong> ${entry.location || '—'}</div>
+                ${entry.witnessPresent ? `<div class="entry-meta"><strong>Witness:</strong> ${entry.witnessPresent}</div>` : ''}
+                <div class="entry-meta"><strong>Time:</strong> ${new Date(entry.timestamp).toLocaleTimeString()}</div>
+              </div>
+
+              ${entry.observations.length > 0 ? `
+                <div style="font-weight: 600; font-size: 15px; margin-bottom: 10px; padding-bottom: 6px; border-bottom: 2px solid #e5e7eb;">Physical Observations</div>
+                ${entry.observations.map(obs => `
+                  <div class="observation-item">
+                    <div class="observation-header" style="margin-bottom: 8px;">
+                      <span>${obs.bodyArea || 'General'}</span>
+                    </div>
+                    ${obs.observation ? `<div style="margin-bottom: 6px;"><strong style="font-size: 12px; color: #6b7280;">Description:</strong><br>${obs.observation}</div>` : ''}
+                    ${obs.parentKnowledge ? `<div style="margin-bottom: 6px;"><strong style="font-size: 12px; color: #6b7280;">Parent Knowledge:</strong> ${obs.parentKnowledge}</div>` : ''}
+                    ${obs.childAware ? `<div style="margin-bottom: 6px;"><strong style="font-size: 12px; color: #6b7280;">Child Awareness:</strong> ${obs.childAware === 'aware' ? 'Aware' : 'Unaware'}</div>` : ''}
+                    ${obs.childExplanation ? `<div style="margin-bottom: 6px;"><strong style="font-size: 12px; color: #6b7280;">Child Explanation:</strong> "${obs.childExplanation}"</div>` : ''}
+                    ${obs.childDemeanorDiscussing && obs.childDemeanorDiscussing.length > 0 ? `<div style="margin-bottom: 6px;"><strong style="font-size: 12px; color: #6b7280;">Demeanor While Discussing:</strong> ${obs.childDemeanorDiscussing.join(', ')}</div>` : ''}
+                    ${obs.notes ? `<div><strong style="font-size: 12px; color: #6b7280;">Notes:</strong> ${obs.notes}</div>` : ''}
+                  </div>
+                `).join('')}
+              ` : '<div class="entry-meta" style="margin-bottom: 12px;">No observations recorded.</div>'}
+
+              ${entry.demeanor.length > 0 ? `
+                <div style="font-weight: 600; font-size: 15px; margin-bottom: 10px; padding-bottom: 6px; border-bottom: 2px solid #e5e7eb;">Overall Demeanor</div>
+                <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px;">
+                  ${entry.demeanor.map(d => `<span style="background: #ecfdf5; color: #065f46; padding: 6px 16px; border-radius: 16px; font-size: 13px; font-weight: 500; border: 1px solid #a7f3d0;">${d}</span>`).join('')}
+                </div>
+              ` : ''}
+
+              ${entry.photos.length > 0 ? `
+                <div style="font-weight: 600; font-size: 15px; margin-bottom: 10px; padding-bottom: 6px; border-bottom: 2px solid #e5e7eb;">Photos (${entry.photos.length})</div>
+                <div class="photo-grid">
+                  ${entry.photos.map((photo, idx) => `
+                    <div class="photo-item">
+                      <img src="${photo.data}" alt="Photo ${idx + 1}">
+                      <div class="photo-caption">${photo.name}</div>
+                    </div>
+                  `).join('')}
+                </div>
+              ` : ''}
+
+              ${entry.additionalObservations ? `
+                <div style="font-weight: 600; font-size: 15px; margin-top: 16px; margin-bottom: 10px; padding-bottom: 6px; border-bottom: 2px solid #e5e7eb;">Additional Observations</div>
+                <div class="quick-notes-section" style="background: #fefce8; border-left-color: #eab308;">${entry.additionalObservations}</div>
+              ` : ''}
+
+              <div style="margin-top: 16px; font-size: 12px; color: #6b7280;">
+                <div>Logged by: ${entry.loggedBy} • Date logged: ${entry.dateLogged}</div>
+                ${entry.storageLocation ? `<div>Storage: ${entry.storageLocation}</div>` : ''}
+              </div>
+
+              <div class="entry-actions" style="margin-top: 20px; padding-top: 16px;">
+                <button class="btn btn-success" onclick="exportEntry(${entry.id})" style="flex: 1;">
+                  📤 Export
+                </button>
+                <button class="btn btn-danger" onclick="deleteEntry(${entry.id})" style="flex: 1;">
+                  🗑️ Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+        return;
+      }
+
       // Form view
       if (state.view === 'form' && state.currentEntry) {
         app.innerHTML = `
@@ -1094,9 +1194,6 @@
             <div class="card">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                 <h1 style="font-size: 20px;">New Entry</h1>
-                <button class="btn btn-dark btn-icon" onclick="toggleDarkMode()">
-                  ${state.darkMode ? '☀️' : '🌙'}
-                </button>
               </div>
               
               <form onsubmit="saveEntry(event)">
