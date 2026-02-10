@@ -593,15 +593,33 @@
   <style>
     @page {
       size: letter;
-      margin: 14mm 16mm;
+      margin: 8mm;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: 'Helvetica Neue', Arial, sans-serif;
+    html, body {
+      height: 100%;
+      width: 100%;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       font-size: 11pt;
       line-height: 1.5;
       color: #1a1a1a;
-      width: 100%;
+      background: #f3f4f6;
+    }
+
+    /* --- Full-page card container (mirrors entry-card style) --- */
+    .page-card {
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      background: #fafafa;
+      padding: 20px 24px;
+      min-height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+    .page-content {
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
     }
 
     /* --- Header banner --- */
@@ -611,17 +629,17 @@
       align-items: center;
       background: linear-gradient(135deg, #1e3a8a, #2563eb);
       color: white;
-      padding: 14px 20px;
-      border-radius: 6px;
-      margin-bottom: 14px;
+      padding: 16px 22px;
+      border-radius: 8px;
+      margin-bottom: 16px;
     }
     .header-left {
       font-weight: 700;
-      font-size: 16pt;
+      font-size: 17pt;
       letter-spacing: 0.2px;
     }
     .header-right {
-      font-size: 10pt;
+      font-size: 10.5pt;
       text-align: right;
       opacity: 0.92;
       line-height: 1.4;
@@ -631,10 +649,10 @@
     .quick-notes {
       background: #fef3c7;
       border-left: 4px solid #f59e0b;
-      padding: 10px 14px;
-      margin-bottom: 14px;
+      padding: 12px 16px;
+      margin-bottom: 16px;
       font-size: 10.5pt;
-      border-radius: 4px;
+      border-radius: 6px;
     }
     .quick-notes strong { color: #92400e; }
 
@@ -642,97 +660,96 @@
     .info-strip {
       display: flex;
       flex-wrap: wrap;
-      gap: 4px 0;
-      background: #f8fafc;
-      border: 1px solid #e2e8f0;
-      border-radius: 6px;
+      gap: 0;
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
       padding: 0;
-      margin-bottom: 14px;
-      font-size: 10pt;
+      margin-bottom: 16px;
+      font-size: 10.5pt;
       overflow: hidden;
     }
     .info-tag {
       flex: 1 1 auto;
-      padding: 8px 14px;
-      border-right: 1px solid #e2e8f0;
-      white-space: nowrap;
+      padding: 10px 16px;
+      border-right: 1px solid #e5e7eb;
     }
     .info-tag:last-child { border-right: none; }
     .info-tag .lbl {
-      color: #64748b;
+      color: #6b7280;
       font-weight: 600;
       font-size: 8pt;
       text-transform: uppercase;
       letter-spacing: 0.5px;
       display: block;
-      margin-bottom: 1px;
+      margin-bottom: 2px;
     }
     .info-tag .val {
-      color: #1e293b;
+      color: #1f2937;
       font-weight: 600;
-      font-size: 10.5pt;
+      font-size: 11pt;
     }
 
     /* --- Section labels --- */
     .sec-label {
       font-weight: 700;
       font-size: 12pt;
-      color: #1e3a8a;
-      border-bottom: 2px solid #2563eb;
-      padding-bottom: 4px;
-      margin: 16px 0 10px 0;
+      color: #1f2937;
+      border-bottom: 2px solid #e5e7eb;
+      padding-bottom: 6px;
+      margin: 18px 0 12px 0;
     }
 
-    /* --- Observations as compact cards --- */
+    /* --- Observations as cards (mirrors entry-card) --- */
     .obs-card {
-      border: 1px solid #e2e8f0;
-      border-radius: 6px;
-      padding: 12px 14px;
-      margin-bottom: 10px;
-      background: #fafbfc;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin-bottom: 12px;
+      background: white;
       page-break-inside: avoid;
     }
     .obs-card-header {
-      font-weight: 700;
-      color: #1e3a8a;
+      font-weight: 600;
+      color: #1f2937;
       font-size: 11pt;
-      margin-bottom: 6px;
-      padding-bottom: 4px;
-      border-bottom: 1px solid #e2e8f0;
+      margin-bottom: 8px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid #e5e7eb;
     }
     .obs-row {
       display: flex;
-      gap: 12px;
+      gap: 14px;
       flex-wrap: wrap;
-      font-size: 10pt;
+      font-size: 10.5pt;
     }
     .obs-field {
       flex: 1 1 auto;
       min-width: 0;
     }
     .obs-field .olbl {
-      color: #64748b;
+      color: #6b7280;
       font-weight: 600;
       font-size: 8pt;
       text-transform: uppercase;
       letter-spacing: 0.4px;
       display: block;
-      margin-bottom: 2px;
+      margin-bottom: 3px;
     }
 
-    /* --- Demeanor inline --- */
+    /* --- Demeanor chips --- */
     .demeanor-row {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
-      margin-top: 8px;
+      margin-top: 10px;
     }
     .dem-chip {
       background: #ecfdf5;
       color: #065f46;
-      padding: 4px 14px;
-      border-radius: 14px;
-      font-size: 10pt;
+      padding: 6px 16px;
+      border-radius: 16px;
+      font-size: 10.5pt;
       font-weight: 500;
       border: 1px solid #a7f3d0;
     }
@@ -742,12 +759,13 @@
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 12px;
-      margin-top: 10px;
+      margin-top: 12px;
     }
     .photo-box {
-      border: 1px solid #e2e8f0;
-      border-radius: 6px;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
       overflow: hidden;
+      background: white;
     }
     .photo-box img {
       width: 100%;
@@ -757,43 +775,46 @@
       object-fit: cover;
     }
     .photo-box .pcap {
-      padding: 6px 8px;
+      padding: 6px 10px;
       font-size: 8.5pt;
-      color: #64748b;
-      background: #f8fafc;
-      border-top: 1px solid #e2e8f0;
+      color: #6b7280;
+      background: #fafafa;
+      border-top: 1px solid #e5e7eb;
     }
 
     /* --- Additional observations --- */
     .addl-obs {
       background: #fefce8;
       border-left: 4px solid #eab308;
-      padding: 10px 14px;
-      border-radius: 4px;
+      padding: 12px 16px;
+      border-radius: 6px;
       font-size: 10.5pt;
-      margin-top: 10px;
-      line-height: 1.5;
+      margin-top: 12px;
+      line-height: 1.6;
     }
+
+    /* --- Spacer pushes footer down --- */
+    .spacer { flex: 1 1 auto; min-height: 20px; }
 
     /* --- Footer --- */
     .footer {
-      margin-top: 20px;
-      padding-top: 10px;
-      border-top: 2px solid #cbd5e1;
+      margin-top: 16px;
+      padding-top: 12px;
+      border-top: 2px solid #e5e7eb;
       display: flex;
       justify-content: space-between;
       align-items: flex-end;
       font-size: 9pt;
-      color: #64748b;
+      color: #6b7280;
     }
     .footer-left div { margin-bottom: 3px; }
     .sig-line {
-      border-top: 1px solid #1e293b;
+      border-top: 1px solid #1f2937;
       width: 220px;
       padding-top: 4px;
       font-size: 9pt;
       text-align: center;
-      color: #475569;
+      color: #6b7280;
     }
 
     @media print {
@@ -802,6 +823,9 @@
   </style>
 </head>
 <body>
+
+<div class="page-card">
+  <div class="page-content">
 
   <div class="header">
     <div class="header-left">${entry.child} — Entry #${entry.entryNumber}</div>
@@ -813,10 +837,10 @@
   ` : ''}
 
   <div class="info-strip">
-    <span class="info-tag"><span class="lbl">Age:</span> <span class="val">${calculatedAge || '—'}</span></span>
-    <span class="info-tag"><span class="lbl">Location:</span> <span class="val">${entry.location || '—'}</span></span>
-    <span class="info-tag"><span class="lbl">Context:</span> <span class="val">${entry.context}${entry.contextOther ? ' (' + entry.contextOther + ')' : ''}</span></span>
-    ${entry.witnessPresent ? `<span class="info-tag"><span class="lbl">Witness:</span> <span class="val">${entry.witnessPresent}</span></span>` : ''}
+    <span class="info-tag"><span class="lbl">Age</span> <span class="val">${calculatedAge || '—'}</span></span>
+    <span class="info-tag"><span class="lbl">Location</span> <span class="val">${entry.location || '—'}</span></span>
+    <span class="info-tag"><span class="lbl">Context</span> <span class="val">${entry.context}${entry.contextOther ? ' (' + entry.contextOther + ')' : ''}</span></span>
+    ${entry.witnessPresent ? `<span class="info-tag"><span class="lbl">Witness</span> <span class="val">${entry.witnessPresent}</span></span>` : ''}
   </div>
 
   ${entry.observations.length > 0 ? `
@@ -829,8 +853,8 @@
           <div class="obs-field" style="flex:1"><span class="olbl">Child Awareness</span><br>${obs.childAware === 'aware' ? '✓ Aware' : obs.childAware === 'unaware' ? '✗ Unaware' : '—'}${obs.childExplanation ? ' — <em>"' + obs.childExplanation + '"</em>' : ''}</div>
           <div class="obs-field" style="flex:0.6"><span class="olbl">Parent Knowledge</span><br>${obs.parentKnowledge || '—'}</div>
         </div>
-        ${obs.childDemeanorDiscussing && obs.childDemeanorDiscussing.length > 0 ? `<div style="margin-top:6px;font-size:9.5pt;"><span class="olbl">Demeanor while discussing:</span> ${obs.childDemeanorDiscussing.join(', ')}</div>` : ''}
-        ${obs.notes ? `<div style="margin-top:6px;font-size:9.5pt;"><span class="olbl">Notes:</span> ${obs.notes}</div>` : ''}
+        ${obs.childDemeanorDiscussing && obs.childDemeanorDiscussing.length > 0 ? `<div style="margin-top:8px;font-size:10pt;"><span class="olbl">Demeanor while discussing:</span> ${obs.childDemeanorDiscussing.join(', ')}</div>` : ''}
+        ${obs.notes ? `<div style="margin-top:8px;font-size:10pt;"><span class="olbl">Notes:</span> ${obs.notes}</div>` : ''}
       </div>
     `).join('')}
   ` : ''}
@@ -843,7 +867,7 @@
   ` : ''}
 
   ${entry.photos.length > 0 ? `
-    <div class="sec-label">Photos (${entry.photos.length}) <span style="font-weight:400;font-size:9pt;color:#64748b;">— originals in ${entry.storageLocation}</span></div>
+    <div class="sec-label">Photos (${entry.photos.length}) <span style="font-weight:400;font-size:9pt;color:#6b7280;">— originals in ${entry.storageLocation}</span></div>
     <div class="photo-grid">
       ${entry.photos.map((photo, idx) => `
         <div class="photo-box">
@@ -859,6 +883,10 @@
     <div class="addl-obs">${entry.additionalObservations}</div>
   ` : ''}
 
+  </div><!-- end page-content -->
+
+  <div class="spacer"></div>
+
   <div class="footer">
     <div class="footer-left">
       <div><strong>Logged by:</strong> ${entry.loggedBy} &nbsp;|&nbsp; <strong>Date:</strong> ${entry.dateLogged} &nbsp;|&nbsp; <strong>Generated:</strong> ${new Date().toLocaleString()}</div>
@@ -866,6 +894,8 @@
     </div>
     <div class="sig-line">Signature</div>
   </div>
+
+</div><!-- end page-card -->
 
 </body>
 </html>`;
