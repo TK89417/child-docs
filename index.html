@@ -580,7 +580,7 @@
     }
     
     // Export to PDF/HTML
-    function exportEntry(entry) {
+    function exportEntryToHtml(entry) {
       const calculatedAge = entry.child && childDOBs[entry.child] ? 
         calculateAge(childDOBs[entry.child], entry.date) : '';
       
@@ -1307,15 +1307,15 @@
     
     function exportEntry(id) {
       const entry = state.entries.find(e => e.id === id);
-      if (entry) exportEntry(entry);
+      if (entry) exportEntryToHtml(entry);
     }
     
     function exportComparison(idx) {
       const pairs = getBeforeAfterPairs();
       if (pairs[idx]) {
         // Export both as separate files or combined
-        exportEntry(pairs[idx].before);
-        setTimeout(() => exportEntry(pairs[idx].after), 500);
+        exportEntryToHtml(pairs[idx].before);
+        setTimeout(() => exportEntryToHtml(pairs[idx].after), 500);
       }
     }
     
