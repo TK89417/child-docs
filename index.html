@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Child Docs">
+  <title>Child Documentation</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f3f4f6;
+      -webkit-font-smoothing: antialiased;
+    }
+    .container { max-width: 1200px; margin: 0 auto; padding: 12px; }
+    .card { background: white; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); padding: 16px; margin-bottom: 12px; }
+    
+    /* Header */
+    .header { margin-bottom: 16px; }
+    .header h1 { font-size: 20px; font-weight: 700; color: #1f2937; margin-bottom: 12px; }
+    .btn-group { display: flex; flex-wrap: wrap; gap: 8px; }
+    
+    /* Buttons */
+    .btn {
+      padding: 10px 16px;
+      border-radius: 8px;
+      border: none;
+      font-weight: 500;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-size: 14px;
+      flex: 1;
+      min-width: 100px;
+    }
+    .btn-primary { background: #2563eb; color: white; }
+    .btn-success { background: #16a34a; color: white; }
+    .btn-danger { background: #dc2626; color: white; }
+    .btn-secondary { background: #6b7280; color: white; }
+    .btn-icon { padding: 10px; min-width: auto; flex: 0; }
+    
+    /* Forms */
+    .form-group { margin-bottom: 16px; }
+    .form-label { display: block; font-weight: 500; margin-bottom: 6px; color: #374151; font-size: 14px; }
+    .form-input, .form-select, .form-textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      font-size: 16px; /* Prevents zoom on iOS */
+      font-family: inherit;
+    }
+    .form-textarea { resize: vertical; min-height: 80px; }
+    
+    /* Entry cards */
+    .entry-card {
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 10px;
+      background: #fafafa;
+    }
+    .entry-header { margin-bottom: 8px; }
+    .entry-title { font-weight: 600; font-size: 16px; color: #1f2937; }
+    .entry-meta { color: #6b7280; font-size: 13px; margin-top: 4px; }
+    .entry-actions { display: flex; gap: 6px; margin-top: 10px; padding-top: 10px; border-top: 1px solid #e5e7eb; }
+    
+    /* Messages */
+    .message {
+      padding: 12px;
+      border-radius: 6px;
+      margin-bottom: 12px;
+      font-size: 14px;
+    }
+    .message-success { background: #d1fae5; color: #065f46; border: 1px solid #6ee7b7; }
+    .message-error { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
+    
+    /* Empty state */
+    .empty { text-align: center; padding: 40px 20px; color: #6b7280; }
+    .empty svg { width: 48px; height: 48px; margin: 0 auto 12px; opacity: 0.3; }
+    
+    /* Radio groups */
+    .radio-group { display: flex; flex-direction: column; gap: 10px; }
+    .radio-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px;
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .radio-label:has(input:checked) { background: #eff6ff; border-color: #2563eb; }
+    .radio-label input[type="radio"] { width: 18px; height: 18px; }
+    
+    /* Dark mode toggle */
+    .dark-toggle { background: #f3f4f6; }
+    
+    @media (min-width: 640px) {
+      .container { padding: 24px; }
+      .card { padding: 24px; }
+      .header h1 { font-size: 28px; }
+      .btn { flex: initial; }
+    }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+  
+  <script>
+    // Simple state management
+    let state = {
+      entries: [],
+      currentEntry: null,
+      view: 'list',
+      message: ''
+    };
+    
+    const childDOBs = {
+      'Benjamin': '2016-06-17',
+      'Vincent': '2018-05-07'
+    };
+    
+    // Load from localStorage
+    function loadEntries() {
+      const saved = localStorage.getItem('childDocs');
+      if (saved) {
+        try {
+          state.entries = JSON.parse(saved);
+        } catch (e) {
+          console.error('Load error:', e);
+        }
+      }
+    }
+    
+    // Save to localStorage
+    function saveEntries() {
+      localStorage.setItem('childDocs', JSON.stringify(state.entries));
+    }
+    
+    // Show message
+    function showMessage(text, type = 'success') {
+      state.message = { text, type };
+      render();
+      setTimeout(() => {
+        state.message = '';
+        render();
+      }, 3000);
+    }
+    
+    // Create new entry
+    function createEntry() {
+      const now = new Date();
+      state.currentEntry = {
+        id: Date.now(),
+        entryNumber: state.entries.length + 1,
+        child: '',
+        date: now.toISOString().split('T')[0],
+        timestamp: now.toISOString(),
+        context: '',
+        quickNotes: '',
+        observations: '',
+        loggedBy: 'Tamas Kiss'
+      };
+      state.view = 'form';
+      render();
+    }
+    
+    // Save entry
+    function saveEntry(e) {
+      e.preventDefault();
+      
+      if (!state.currentEntry.child || !state.currentEntry.date || !state.currentEntry.context) {
+        showMessage('Please fill required fields', 'error');
+        return;
+      }
+      
+      const existing = state.entries.findIndex(e => e.id === state.currentEntry.id);
+      if (existing >= 0) {
+        state.entries[existing] = state.currentEntry;
+      } else {
+        state.entries.push(state.currentEntry);
+      }
+      
+      saveEntries();
+      state.currentEntry = null;
+      state.view = 'list';
+      showMessage('Entry saved!');
+    }
+    
+    // Delete entry
+    function deleteEntry(id) {
+      if (confirm('Delete this entry?')) {
+        state.entries = state.entries.filter(e => e.id !== id);
+        saveEntries();
+        showMessage('Entry deleted');
+      }
+    }
+    
+    // Export to HTML/PDF
+    function exportEntry(entry) {
+      const html = `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Documentation - ${entry.child}</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 800px; margin: 40px auto; padding: 0 20px; line-height: 1.6; }
+    h1 { color: #1f2937; border-bottom: 3px solid #2563eb; padding-bottom: 10px; }
+    .field { margin: 12px 0; }
+    .label { font-weight: 600; color: #374151; }
+    .value { color: #1f2937; }
+    .notes { background: #fef3c7; padding: 12px; border-left: 4px solid #f59e0b; margin: 16px 0; }
+    .footer { margin-top: 40px; padding-top: 20px; border-top: 2px solid #e5e7eb; font-size: 12px; color: #6b7280; }
+  </style>
+</head>
+<body>
+  <h1>Child Documentation Log</h1>
+  <div class="field"><span class="label">Entry #:</span> <span class="value">${entry.entryNumber}</span></div>
+  <div class="field"><span class="label">Child:</span> <span class="value">${entry.child}</span></div>
+  <div class="field"><span class="label">Date:</span> <span class="value">${entry.date}</span></div>
+  <div class="field"><span class="label">Time:</span> <span class="value">${new Date(entry.timestamp).toLocaleTimeString()}</span></div>
+  <div class="field"><span class="label">Context:</span> <span class="value">${entry.context}</span></div>
+  ${entry.quickNotes ? `<div class="notes"><strong>Quick Notes:</strong><br>${entry.quickNotes}</div>` : ''}
+  ${entry.observations ? `<div class="field"><span class="label">Observations:</span><br><span class="value">${entry.observations}</span></div>` : ''}
+  <div class="footer">
+    <div><strong>Logged by:</strong> ${entry.loggedBy}</div>
+    <div><strong>Generated:</strong> ${new Date().toLocaleString()}</div>
+  </div>
+</body>
+</html>`;
+      
+      const blob = new Blob([html], { type: 'text/html' });
+      const filename = `${entry.child}-${entry.date}.html`;
+      
+      // Try iOS Share Sheet first
+      if (navigator.share && navigator.canShare({ files: [new File([blob], filename)] })) {
+        const file = new File([blob], filename, { type: 'text/html' });
+        navigator.share({ title: 'Child Documentation', files: [file] })
+          .then(() => showMessage('Shared successfully!'))
+          .catch(err => {
+            console.error('Share failed:', err);
+            downloadFile(blob, filename);
+          });
+      } else {
+        downloadFile(blob, filename);
+      }
+    }
+    
+    function downloadFile(blob, filename) {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showMessage('Downloaded! Open and print to PDF.');
+    }
+    
+    // Render app
+    function render() {
+      const app = document.getElementById('app');
+      
+      if (state.view === 'list') {
+        app.innerHTML = `
+          <div class="container">
+            <div class="card">
+              <div class="header">
+                <h1>Child Documentation</h1>
+                <div class="btn-group">
+                  <button class="btn btn-primary" onclick="createEntry()">
+                    <span>➕</span> New Entry
+                  </button>
+                </div>
+              </div>
+              
+              ${state.message ? `<div class="message message-${state.message.type}">${state.message.text}</div>` : ''}
+              
+              ${state.entries.length === 0 ? `
+                <div class="empty">
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                  </svg>
+                  <p style="font-size: 16px; margin-bottom: 4px;">No entries yet</p>
+                  <p style="font-size: 14px;">Create your first entry</p>
+                </div>
+              ` : `
+                <div>
+                  ${state.entries.slice().reverse().map(entry => `
+                    <div class="entry-card">
+                      <div class="entry-header">
+                        <div class="entry-title">#${entry.entryNumber} - ${entry.child}</div>
+                        <div class="entry-meta">${entry.date} • ${entry.context}</div>
+                        ${entry.quickNotes ? `<div class="entry-meta" style="font-style: italic; margin-top: 4px;">${entry.quickNotes.substring(0, 60)}${entry.quickNotes.length > 60 ? '...' : ''}</div>` : ''}
+                      </div>
+                      <div class="entry-actions">
+                        <button class="btn btn-success" onclick="exportEntry(${entry.id})" style="flex: 1;">
+                          <span>📤</span> Export
+                        </button>
+                        <button class="btn btn-danger" onclick="deleteEntry(${entry.id})" style="flex: 1;">
+                          <span>🗑️</span> Delete
+                        </button>
+                      </div>
+                    </div>
+                  `).join('')}
+                </div>
+              `}
+            </div>
+          </div>
+        `;
+      } else if (state.view === 'form') {
+        app.innerHTML = `
+          <div class="container">
+            <div class="card">
+              <h1 style="font-size: 20px; margin-bottom: 20px;">New Entry</h1>
+              
+              <form onsubmit="saveEntry(event)">
+                <div class="form-group">
+                  <label class="form-label">Child *</label>
+                  <select class="form-select" id="child" required>
+                    <option value="">Select child</option>
+                    <option value="Benjamin" ${state.currentEntry.child === 'Benjamin' ? 'selected' : ''}>Benjamin</option>
+                    <option value="Vincent" ${state.currentEntry.child === 'Vincent' ? 'selected' : ''}>Vincent</option>
+                  </select>
+                </div>
+                
+                <div class="form-group">
+                  <label class="form-label">Date *</label>
+                  <input type="date" class="form-input" id="date" value="${state.currentEntry.date}" required>
+                </div>
+                
+                <div class="form-group">
+                  <label class="form-label">Context *</label>
+                  <div class="radio-group">
+                    ${['Before exchange', 'After exchange', 'Other'].map(ctx => `
+                      <label class="radio-label">
+                        <input type="radio" name="context" value="${ctx}" ${state.currentEntry.context === ctx ? 'checked' : ''} required>
+                        <span>${ctx}</span>
+                      </label>
+                    `).join('')}
+                  </div>
+                </div>
+                
+                <div class="form-group">
+                  <label class="form-label">Quick Notes</label>
+                  <input type="text" class="form-input" id="quickNotes" value="${state.currentEntry.quickNotes || ''}" placeholder="e.g., Returned 30 min late">
+                </div>
+                
+                <div class="form-group">
+                  <label class="form-label">Observations</label>
+                  <textarea class="form-textarea" id="observations" placeholder="Describe observations...">${state.currentEntry.observations || ''}</textarea>
+                </div>
+                
+                <div style="display: flex; gap: 10px;">
+                  <button type="button" class="btn btn-secondary" onclick="cancelForm()" style="flex: 1;">Cancel</button>
+                  <button type="submit" class="btn btn-primary" style="flex: 2;">Save Entry</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        `;
+        
+        // Add event listeners
+        document.getElementById('child').onchange = (e) => state.currentEntry.child = e.target.value;
+        document.getElementById('date').onchange = (e) => state.currentEntry.date = e.target.value;
+        document.getElementById('quickNotes').oninput = (e) => state.currentEntry.quickNotes = e.target.value;
+        document.getElementById('observations').oninput = (e) => state.currentEntry.observations = e.target.value;
+        document.querySelectorAll('input[name="context"]').forEach(radio => {
+          radio.onchange = (e) => state.currentEntry.context = e.target.value;
+        });
+      }
+    }
+    
+    function exportEntry(id) {
+      const entry = state.entries.find(e => e.id === id);
+      if (entry) exportEntry(entry);
+    }
+    
+    function cancelForm() {
+      state.currentEntry = null;
+      state.view = 'list';
+      render();
+    }
+    
+    // Initialize
+    loadEntries();
+    render();
+  </script>
+</body>
+</html>
