@@ -1,0 +1,1334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Child Docs">
+  <title>Child Documentation</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f3f4f6;
+      -webkit-font-smoothing: antialiased;
+    }
+    
+    body.dark-mode { background: #374151; }
+    
+    .container { max-width: 1200px; margin: 0 auto; padding: 12px; }
+    
+    .card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+    
+    body.dark-mode .card { background: #1f2937; }
+    
+    /* Header */
+    .header { margin-bottom: 16px; }
+    .header h1 {
+      font-size: 20px;
+      font-weight: 700;
+      color: #1f2937;
+      margin-bottom: 12px;
+    }
+    
+    body.dark-mode .header h1 { color: #f3f4f6; }
+    
+    .btn-group { display: flex; flex-wrap: wrap; gap: 8px; }
+    
+    /* Buttons */
+    .btn {
+      padding: 10px 16px;
+      border-radius: 8px;
+      border: none;
+      font-weight: 500;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-size: 14px;
+      flex: 1;
+      min-width: 100px;
+    }
+    
+    .btn-primary { background: #2563eb; color: white; }
+    .btn-success { background: #16a34a; color: white; }
+    .btn-danger { background: #dc2626; color: white; }
+    .btn-secondary { background: #6b7280; color: white; }
+    .btn-purple { background: #7c3aed; color: white; }
+    .btn-dark { background: #374151; color: white; }
+    .btn-icon { padding: 10px; min-width: auto; flex: 0; }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    
+    /* Forms */
+    .form-group { margin-bottom: 16px; }
+    .form-label {
+      display: block;
+      font-weight: 500;
+      margin-bottom: 6px;
+      color: #374151;
+      font-size: 14px;
+    }
+    
+    body.dark-mode .form-label { color: #d1d5db; }
+    
+    .form-input, .form-select, .form-textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      font-size: 16px;
+      font-family: inherit;
+      background: white;
+      color: #1f2937;
+    }
+    
+    body.dark-mode .form-input,
+    body.dark-mode .form-select,
+    body.dark-mode .form-textarea {
+      background: #374151;
+      border-color: #4b5563;
+      color: #f3f4f6;
+    }
+    
+    .form-textarea { resize: vertical; min-height: 80px; }
+    .form-input-small { padding: 8px; font-size: 14px; }
+    
+    /* Entry cards */
+    .entry-card {
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 10px;
+      background: #fafafa;
+    }
+    
+    body.dark-mode .entry-card {
+      background: #374151;
+      border-color: #4b5563;
+    }
+    
+    .entry-header { margin-bottom: 8px; }
+    .entry-title {
+      font-weight: 600;
+      font-size: 16px;
+      color: #1f2937;
+    }
+    
+    body.dark-mode .entry-title { color: #f3f4f6; }
+    
+    .entry-meta {
+      color: #6b7280;
+      font-size: 13px;
+      margin-top: 4px;
+    }
+    
+    body.dark-mode .entry-meta { color: #9ca3af; }
+    
+    .entry-actions {
+      display: flex;
+      gap: 6px;
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid #e5e7eb;
+    }
+    
+    body.dark-mode .entry-actions { border-top-color: #4b5563; }
+    
+    /* Messages */
+    .message {
+      padding: 12px;
+      border-radius: 6px;
+      margin-bottom: 12px;
+      font-size: 14px;
+    }
+    
+    .message-success {
+      background: #d1fae5;
+      color: #065f46;
+      border: 1px solid #6ee7b7;
+    }
+    
+    .message-error {
+      background: #fee2e2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+    }
+    
+    /* Empty state */
+    .empty {
+      text-align: center;
+      padding: 40px 20px;
+      color: #6b7280;
+    }
+    
+    body.dark-mode .empty { color: #9ca3af; }
+    
+    .empty svg {
+      width: 48px;
+      height: 48px;
+      margin: 0 auto 12px;
+      opacity: 0.3;
+    }
+    
+    /* Radio/Checkbox groups */
+    .radio-group, .checkbox-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    .radio-label, .checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px;
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    
+    body.dark-mode .radio-label,
+    body.dark-mode .checkbox-label {
+      border-color: #4b5563;
+    }
+    
+    .radio-label:has(input:checked),
+    .checkbox-label:has(input:checked) {
+      background: #eff6ff;
+      border-color: #2563eb;
+    }
+    
+    body.dark-mode .radio-label:has(input:checked),
+    body.dark-mode .checkbox-label:has(input:checked) {
+      background: #1e3a8a;
+      border-color: #3b82f6;
+    }
+    
+    .radio-label input[type="radio"],
+    .checkbox-label input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+    }
+    
+    /* Photos */
+    .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 12px;
+      margin-top: 12px;
+    }
+    
+    .photo-item {
+      position: relative;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 2px solid #e5e7eb;
+    }
+    
+    body.dark-mode .photo-item { border-color: #4b5563; }
+    
+    .photo-item img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      display: block;
+    }
+    
+    .photo-delete {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: rgba(220, 38, 38, 0.9);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 28px;
+      height: 28px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+    
+    .photo-caption {
+      padding: 6px;
+      background: rgba(0,0,0,0.7);
+      color: white;
+      font-size: 11px;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+    }
+    
+    /* Observations */
+    .observation-item {
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 12px;
+      background: #f9fafb;
+    }
+    
+    body.dark-mode .observation-item {
+      background: #374151;
+      border-color: #4b5563;
+    }
+    
+    .observation-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      font-weight: 600;
+      color: #1f2937;
+    }
+    
+    body.dark-mode .observation-header { color: #f3f4f6; }
+    
+    /* Voice recording indicator */
+    .recording {
+      animation: pulse 1s ease-in-out infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    
+    /* Quick notes highlight */
+    .quick-notes-section {
+      background: #fef3c7;
+      border-left: 4px solid #f59e0b;
+      padding: 12px;
+      border-radius: 6px;
+      margin-bottom: 16px;
+    }
+    
+    body.dark-mode .quick-notes-section {
+      background: #78350f;
+      border-left-color: #fbbf24;
+    }
+    
+    /* Responsive */
+    @media (min-width: 640px) {
+      .container { padding: 24px; }
+      .card { padding: 24px; }
+      .header h1 { font-size: 28px; }
+      .btn { flex: initial; }
+    }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+  
+  <script>
+    // State management
+    let state = {
+      entries: [],
+      currentEntry: null,
+      view: 'list',
+      message: '',
+      darkMode: false,
+      showComparison: false,
+      recognition: null
+    };
+    
+    const childDOBs = {
+      'Benjamin': '2016-06-17',
+      'Vincent': '2018-05-07'
+    };
+    
+    // Calculate age
+    function calculateAge(dob, asOfDate) {
+      if (!dob || !asOfDate) return '';
+      const birth = new Date(dob);
+      const current = new Date(asOfDate);
+      
+      let years = current.getFullYear() - birth.getFullYear();
+      let months = current.getMonth() - birth.getMonth();
+      
+      if (months < 0) {
+        years--;
+        months += 12;
+      }
+      
+      return `${years} years, ${months} months`;
+    }
+    
+    // Load from localStorage
+    function loadEntries() {
+      const saved = localStorage.getItem('childDocs');
+      if (saved) {
+        try {
+          state.entries = JSON.parse(saved);
+        } catch (e) {
+          console.error('Load error:', e);
+        }
+      }
+    }
+    
+    // Save to localStorage
+    function saveEntries() {
+      localStorage.setItem('childDocs', JSON.stringify(state.entries));
+    }
+    
+    // Dark mode
+    function initDarkMode() {
+      const savedMode = localStorage.getItem('darkMode');
+      if (savedMode !== null) {
+        state.darkMode = savedMode === 'true';
+      } else {
+        const hour = new Date().getHours();
+        state.darkMode = hour >= 19 || hour < 7;
+      }
+      
+      if (state.darkMode) {
+        document.body.classList.add('dark-mode');
+      }
+    }
+    
+    function toggleDarkMode() {
+      state.darkMode = !state.darkMode;
+      localStorage.setItem('darkMode', state.darkMode.toString());
+      
+      if (state.darkMode) {
+        document.body.classList.add('dark-mode');
+      } else {
+        document.body.classList.remove('dark-mode');
+      }
+      
+      render();
+    }
+    
+    // Show message
+    function showMessage(text, type = 'success') {
+      state.message = { text, type };
+      render();
+      setTimeout(() => {
+        state.message = '';
+        render();
+      }, 3000);
+    }
+    
+    // Voice recognition
+    function initVoiceRecognition() {
+      if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        state.recognition = new SpeechRecognition();
+        state.recognition.continuous = true;
+        state.recognition.interimResults = true;
+      }
+    }
+    
+    function startRecording(fieldId) {
+      if (!state.recognition) {
+        showMessage('Voice recognition not supported', 'error');
+        return;
+      }
+      
+      const field = document.getElementById(fieldId);
+      if (!field) return;
+      
+      state.recognition.onresult = (event) => {
+        const transcript = Array.from(event.results)
+          .map(result => result[0].transcript)
+          .join('');
+        field.value = transcript;
+      };
+      
+      state.recognition.onerror = (error) => {
+        console.error('Speech recognition error:', error);
+        showMessage('Voice recognition error', 'error');
+      };
+      
+      state.recognition.start();
+      field.classList.add('recording');
+    }
+    
+    function stopRecording(fieldId) {
+      if (state.recognition) {
+        state.recognition.stop();
+        const field = document.getElementById(fieldId);
+        if (field) field.classList.remove('recording');
+      }
+    }
+    
+    // Create new entry
+    function createEntry() {
+      const now = new Date();
+      state.currentEntry = {
+        id: Date.now(),
+        entryNumber: state.entries.length + 1,
+        child: '',
+        date: now.toISOString().split('T')[0],
+        timestamp: now.toISOString(),
+        context: '',
+        contextOther: '',
+        location: 'Home (Springfield, MO)',
+        witnessPresent: '',
+        quickNotes: '',
+        observations: [],
+        demeanor: [],
+        photos: [],
+        storageLocation: 'iCloud Drive',
+        additionalObservations: '',
+        loggedBy: 'Tamas Kiss',
+        dateLogged: now.toISOString().split('T')[0]
+      };
+      state.view = 'form';
+      render();
+    }
+    
+    // Add observation
+    function addObservation() {
+      state.currentEntry.observations.push({
+        bodyArea: '',
+        observation: '',
+        childAware: '',
+        childExplanation: '',
+        childDemeanorDiscussing: [],
+        parentKnowledge: '',
+        notes: ''
+      });
+      render();
+    }
+    
+    // Remove observation
+    function removeObservation(index) {
+      state.currentEntry.observations.splice(index, 1);
+      render();
+    }
+    
+    // Handle photo upload
+    function handlePhotoUpload(e) {
+      const files = Array.from(e.target.files);
+      let processed = 0;
+      
+      files.forEach(file => {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          state.currentEntry.photos.push({
+            data: event.target.result,
+            name: file.name,
+            timestamp: new Date().toISOString(),
+            size: file.size
+          });
+          processed++;
+          if (processed === files.length) {
+            render();
+          }
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+    
+    // Remove photo
+    function removePhoto(index) {
+      state.currentEntry.photos.splice(index, 1);
+      render();
+    }
+    
+    // Save entry
+    function saveEntry(e) {
+      e.preventDefault();
+      
+      console.log('Saving entry:', state.currentEntry);
+      console.log('Child:', state.currentEntry.child);
+      console.log('Date:', state.currentEntry.date);
+      console.log('Context:', state.currentEntry.context);
+      
+      if (!state.currentEntry.child || !state.currentEntry.date || !state.currentEntry.context) {
+        showMessage('Please fill required fields: ' + 
+          (!state.currentEntry.child ? 'Child ' : '') +
+          (!state.currentEntry.date ? 'Date ' : '') +
+          (!state.currentEntry.context ? 'Context' : ''), 'error');
+        return;
+      }
+      
+      const existing = state.entries.findIndex(e => e.id === state.currentEntry.id);
+      if (existing >= 0) {
+        state.entries[existing] = state.currentEntry;
+      } else {
+        state.entries.push(state.currentEntry);
+      }
+      
+      saveEntries();
+      state.currentEntry = null;
+      state.view = 'list';
+      showMessage('Entry saved!');
+    }
+    
+    // Delete entry
+    function deleteEntry(id) {
+      if (confirm('Delete this entry?')) {
+        state.entries = state.entries.filter(e => e.id !== id);
+        saveEntries();
+        showMessage('Entry deleted');
+      }
+    }
+    
+    // Export to PDF/HTML
+    function exportEntry(entry) {
+      const calculatedAge = entry.child && childDOBs[entry.child] ? 
+        calculateAge(childDOBs[entry.child], entry.date) : '';
+      
+      const html = `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Documentation - ${entry.child}</title>
+  <style>
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 0 20px;
+      line-height: 1.6;
+      color: #1a1a1a;
+    }
+    h1 {
+      color: #1e40af;
+      border-bottom: 3px solid #2563eb;
+      padding-bottom: 10px;
+      text-align: center;
+    }
+    .entry-number {
+      text-align: center;
+      color: #64748b;
+      margin-bottom: 20px;
+    }
+    .quick-notes {
+      background: linear-gradient(to right, #fef3c7, #fef9e7);
+      border-left: 4px solid #f59e0b;
+      padding: 12px 15px;
+      margin: 20px 0;
+      border-radius: 4px;
+    }
+    .quick-notes strong { color: #92400e; }
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px 20px;
+      background: #f8fafc;
+      padding: 15px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+      border: 1px solid #e2e8f0;
+    }
+    .info-item {
+      display: flex;
+      align-items: baseline;
+    }
+    .label {
+      font-weight: 600;
+      color: #475569;
+      min-width: 120px;
+      font-size: 9pt;
+    }
+    .value {
+      color: #1e293b;
+      font-weight: 500;
+    }
+    .value.highlight {
+      background: #dbeafe;
+      padding: 2px 6px;
+      border-radius: 3px;
+      color: #1e40af;
+    }
+    .section {
+      margin: 20px 0;
+    }
+    .section-header {
+      background: linear-gradient(to right, #1e40af, #3b82f6);
+      color: white;
+      padding: 8px 12px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      border-radius: 4px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 10px 0;
+      font-size: 9pt;
+    }
+    th, td {
+      border: 1px solid #e2e8f0;
+      padding: 10px 8px;
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      background: #1e40af;
+      color: white;
+      font-weight: 600;
+    }
+    tr:nth-child(even) td { background: #f8fafc; }
+    .demeanor-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .demeanor-chip {
+      background: #ecfdf5;
+      color: #065f46;
+      padding: 6px 12px;
+      border-radius: 16px;
+      font-size: 9pt;
+      border: 1px solid #a7f3d0;
+    }
+    .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      margin: 12px 0;
+    }
+    .photo-container {
+      border: 2px solid #e2e8f0;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .photo-container img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .photo-caption {
+      padding: 8px;
+      background: #f8fafc;
+      border-top: 1px solid #e2e8f0;
+      font-size: 8pt;
+      color: #64748b;
+    }
+    .footer {
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 2px solid #e2e8f0;
+      font-size: 9pt;
+      color: #64748b;
+    }
+    .signature-line {
+      margin-top: 40px;
+      padding-top: 2px;
+      border-top: 1px solid #1e293b;
+      width: 250px;
+    }
+    @media print {
+      body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    }
+  </style>
+</head>
+<body>
+  <h1>Child Documentation Log</h1>
+  <div class="entry-number">Entry #${entry.entryNumber}</div>
+  
+  ${entry.quickNotes ? `
+    <div class="quick-notes">
+      <strong>⚠️ Quick Notes:</strong><br>
+      ${entry.quickNotes}
+    </div>
+  ` : ''}
+  
+  <div class="info-grid">
+    <div class="info-item">
+      <span class="label">Child:</span>
+      <span class="value highlight">${entry.child}</span>
+    </div>
+    <div class="info-item">
+      <span class="label">Age:</span>
+      <span class="value">${calculatedAge || 'Not specified'}</span>
+    </div>
+    <div class="info-item">
+      <span class="label">Date:</span>
+      <span class="value">${entry.date}</span>
+    </div>
+    <div class="info-item">
+      <span class="label">Time:</span>
+      <span class="value">${new Date(entry.timestamp).toLocaleTimeString()}</span>
+    </div>
+    <div class="info-item">
+      <span class="label">Location:</span>
+      <span class="value">${entry.location || 'Not specified'}</span>
+    </div>
+    <div class="info-item">
+      <span class="label">Context:</span>
+      <span class="value">${entry.context}${entry.contextOther ? ` (${entry.contextOther})` : ''}</span>
+    </div>
+    ${entry.witnessPresent ? `
+      <div class="info-item" style="grid-column: span 2;">
+        <span class="label">Witness:</span>
+        <span class="value">${entry.witnessPresent}</span>
+      </div>
+    ` : ''}
+  </div>
+  
+  ${entry.observations.length > 0 ? `
+    <div class="section">
+      <div class="section-header">📝 Physical Observations</div>
+      <table>
+        <thead>
+          <tr>
+            <th>Body Area</th>
+            <th>Description</th>
+            <th>Child Response</th>
+            <th>Parent Knowledge</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${entry.observations.map(obs => `
+            <tr>
+              <td>${obs.bodyArea || '—'}</td>
+              <td>${obs.observation || '—'}</td>
+              <td>
+                ${obs.childAware === 'aware' ? '✓ Child aware' : obs.childAware === 'unaware' ? '✗ Child unaware' : '—'}
+                ${obs.childExplanation ? `<br><em>"${obs.childExplanation}"</em>` : ''}
+                ${obs.childDemeanorDiscussing.length > 0 ? `<br>Demeanor: ${obs.childDemeanorDiscussing.join(', ')}` : ''}
+              </td>
+              <td>${obs.parentKnowledge || '—'}</td>
+              <td>${obs.notes || '—'}</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    </div>
+  ` : ''}
+  
+  ${entry.demeanor.length > 0 ? `
+    <div class="section">
+      <div class="section-header">😊 Overall Child Demeanor</div>
+      <div class="demeanor-chips">
+        ${entry.demeanor.map(d => `<span class="demeanor-chip">${d}</span>`).join('')}
+      </div>
+    </div>
+  ` : ''}
+  
+  ${entry.photos.length > 0 ? `
+    <div class="section">
+      <div class="section-header">📷 Photographic Documentation (${entry.photos.length})</div>
+      <p style="font-size: 9pt; color: #64748b; margin-bottom: 10px;">
+        <strong>Original Files:</strong> Stored in ${entry.storageLocation}
+      </p>
+      <div class="photo-grid">
+        ${entry.photos.map((photo, idx) => `
+          <div class="photo-container">
+            <img src="${photo.data}" alt="Photo ${idx + 1}">
+            <div class="photo-caption">
+              <strong>Photo ${idx + 1}</strong> - ${photo.name}<br>
+              ${new Date(photo.timestamp).toLocaleString()}
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  ` : ''}
+  
+  ${entry.additionalObservations ? `
+    <div class="section">
+      <div class="section-header">📄 Additional Observations</div>
+      <div style="background: #fefce8; border-left: 4px solid #eab308; padding: 12px; border-radius: 4px;">
+        ${entry.additionalObservations}
+      </div>
+    </div>
+  ` : ''}
+  
+  <div class="footer">
+    <div><strong>Logged by:</strong> ${entry.loggedBy}</div>
+    <div><strong>Date Logged:</strong> ${entry.dateLogged}</div>
+    <div><strong>Generated:</strong> ${new Date().toLocaleString()}</div>
+    <div style="margin-top: 10px; font-style: italic;">
+      Original records maintained by Tamas Kiss for legal chain of custody.
+    </div>
+    <div class="signature-line">
+      Signature: ___________________________
+    </div>
+  </div>
+</body>
+</html>`;
+      
+      const blob = new Blob([html], { type: 'text/html' });
+      const filename = `${entry.child}-${entry.date}.html`;
+      
+      // Try iOS Share Sheet
+      if (navigator.share && navigator.canShare({ files: [new File([blob], filename)] })) {
+        const file = new File([blob], filename, { type: 'text/html' });
+        navigator.share({
+          title: 'Child Documentation',
+          files: [file]
+        })
+        .then(() => showMessage('✓ Shared! Save to iCloud Drive, then open and print to PDF.'))
+        .catch(err => {
+          console.error('Share failed:', err);
+          downloadFile(blob, filename);
+        });
+      } else {
+        downloadFile(blob, filename);
+      }
+    }
+    
+    function downloadFile(blob, filename) {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showMessage('✓ Downloaded! Open and press Ctrl+P to save as PDF.');
+    }
+    
+    // Toggle comparison view
+    function toggleComparison() {
+      state.showComparison = !state.showComparison;
+      render();
+    }
+    
+    // Get before/after pairs
+    function getBeforeAfterPairs() {
+      const pairs = [];
+      const sorted = [...state.entries].sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+      
+      for (let i = 0; i < sorted.length - 1; i++) {
+        const current = sorted[i];
+        const next = sorted[i + 1];
+        
+        if (current.context === 'Before exchange' && 
+            next.context === 'After exchange' &&
+            current.child === next.child) {
+          pairs.push({ before: current, after: next });
+        }
+      }
+      
+      return pairs;
+    }
+    
+    // Render app
+    function render() {
+      const app = document.getElementById('app');
+      
+      // Comparison view
+      if (state.showComparison) {
+        const pairs = getBeforeAfterPairs();
+        
+        app.innerHTML = `
+          <div class="container">
+            <div class="card">
+              <div class="header">
+                <h1>Before/After Comparison</h1>
+                <div class="btn-group">
+                  <button class="btn btn-dark btn-icon" onclick="toggleDarkMode()">
+                    ${state.darkMode ? '☀️' : '🌙'}
+                  </button>
+                  <button class="btn btn-secondary" onclick="toggleComparison()">
+                    ← Back to List
+                  </button>
+                </div>
+              </div>
+              
+              ${pairs.length === 0 ? `
+                <div class="empty">
+                  <p style="font-size: 16px;">No before/after pairs found.</p>
+                  <p style="font-size: 14px; margin-top: 8px;">Create entries with "Before exchange" and "After exchange" context.</p>
+                </div>
+              ` : `
+                ${pairs.map((pair, idx) => `
+                  <div class="entry-card" style="margin-bottom: 20px;">
+                    <h3 style="margin-bottom: 12px;">${pair.before.child} - ${pair.before.date}</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                      <div style="border-right: 2px solid #e5e7eb; padding-right: 16px;">
+                        <h4 style="color: #16a34a; margin-bottom: 8px;">BEFORE Exchange</h4>
+                        <div class="entry-meta">Time: ${new Date(pair.before.timestamp).toLocaleTimeString()}</div>
+                        ${pair.before.quickNotes ? `<div class="entry-meta" style="font-style: italic; margin-top: 4px;">${pair.before.quickNotes}</div>` : ''}
+                        <div class="entry-meta" style="margin-top: 8px;">
+                          Demeanor: ${pair.before.demeanor.join(', ') || 'None'}
+                        </div>
+                        <div class="entry-meta">
+                          Observations: ${pair.before.observations.length}
+                        </div>
+                      </div>
+                      <div style="padding-left: 16px;">
+                        <h4 style="color: #dc2626; margin-bottom: 8px;">AFTER Exchange</h4>
+                        <div class="entry-meta">Time: ${new Date(pair.after.timestamp).toLocaleTimeString()}</div>
+                        ${pair.after.quickNotes ? `<div class="entry-meta" style="font-style: italic; margin-top: 4px;">${pair.after.quickNotes}</div>` : ''}
+                        <div class="entry-meta" style="margin-top: 8px;">
+                          Demeanor: ${pair.after.demeanor.join(', ') || 'None'}
+                        </div>
+                        <div class="entry-meta">
+                          Observations: ${pair.after.observations.length}
+                        </div>
+                      </div>
+                    </div>
+                    <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid #e5e7eb;">
+                      <button class="btn btn-success" onclick="exportComparison(${idx})">
+                        📤 Export This Comparison
+                      </button>
+                    </div>
+                  </div>
+                `).join('')}
+              `}
+            </div>
+          </div>
+        `;
+        return;
+      }
+      
+      // List view
+      if (state.view === 'list') {
+        app.innerHTML = `
+          <div class="container">
+            <div class="card">
+              <div class="header">
+                <h1>Child Documentation</h1>
+                <div class="btn-group">
+                  <button class="btn btn-dark btn-icon" onclick="toggleDarkMode()" title="Toggle dark mode">
+                    ${state.darkMode ? '☀️' : '🌙'}
+                  </button>
+                  <button class="btn btn-purple" onclick="toggleComparison()">
+                    🔄 Compare
+                  </button>
+                  <button class="btn btn-primary" onclick="createEntry()">
+                    ➕ New Entry
+                  </button>
+                </div>
+              </div>
+              
+              ${state.message ? `<div class="message message-${state.message.type}">${state.message.text}</div>` : ''}
+              
+              ${state.entries.length === 0 ? `
+                <div class="empty">
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                  </svg>
+                  <p style="font-size: 16px; margin-bottom: 4px;">No entries yet</p>
+                  <p style="font-size: 14px;">Create your first documentation entry</p>
+                </div>
+              ` : `
+                <div>
+                  ${state.entries.slice().reverse().map(entry => `
+                    <div class="entry-card">
+                      <div class="entry-header">
+                        <div class="entry-title">#${entry.entryNumber} - ${entry.child}</div>
+                        <div class="entry-meta">${entry.date} • ${entry.context}</div>
+                        ${entry.quickNotes ? `<div class="entry-meta" style="font-style: italic; margin-top: 4px;">${entry.quickNotes.substring(0, 80)}${entry.quickNotes.length > 80 ? '...' : ''}</div>` : ''}
+                        <div class="entry-meta" style="margin-top: 4px;">
+                          📊 ${entry.observations.length} observations • 📷 ${entry.photos.length} photos
+                        </div>
+                      </div>
+                      <div class="entry-actions">
+                        <button class="btn btn-success" onclick="exportEntry(${entry.id})" style="flex: 1;">
+                          📤 Export
+                        </button>
+                        <button class="btn btn-danger" onclick="deleteEntry(${entry.id})" style="flex: 1;">
+                          🗑️ Delete
+                        </button>
+                      </div>
+                    </div>
+                  `).join('')}
+                </div>
+              `}
+            </div>
+          </div>
+        `;
+        return;
+      }
+      
+      // Form view
+      if (state.view === 'form' && state.currentEntry) {
+        app.innerHTML = `
+          <div class="container">
+            <div class="card">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h1 style="font-size: 20px;">New Entry</h1>
+                <button class="btn btn-dark btn-icon" onclick="toggleDarkMode()">
+                  ${state.darkMode ? '☀️' : '🌙'}
+                </button>
+              </div>
+              
+              <form onsubmit="saveEntry(event)">
+                <!-- Quick Notes -->
+                <div class="quick-notes-section">
+                  <label class="form-label">Quick Notes</label>
+                  <input type="text" class="form-input" id="quickNotes" placeholder="e.g., Returned 30 minutes late">
+                </div>
+                
+                <!-- Basic Info -->
+                <div class="form-group">
+                  <label class="form-label">Child *</label>
+                  <select class="form-select" id="child" required>
+                    <option value="">Select child</option>
+                    <option value="Benjamin">Benjamin</option>
+                    <option value="Vincent">Vincent</option>
+                  </select>
+                </div>
+                
+                <div class="form-group">
+                  <label class="form-label">Date *</label>
+                  <input type="date" class="form-input" id="date" value="${state.currentEntry.date}" required>
+                </div>
+                
+                <div class="form-group">
+                  <label class="form-label">Context *</label>
+                  <div class="radio-group">
+                    <label class="radio-label">
+                      <input type="radio" name="context" value="Before exchange" required>
+                      <span>Before exchange</span>
+                    </label>
+                    <label class="radio-label">
+                      <input type="radio" name="context" value="After exchange" required>
+                      <span>After exchange</span>
+                    </label>
+                    <label class="radio-label">
+                      <input type="radio" name="context" value="Other" required>
+                      <span>Other</span>
+                    </label>
+                  </div>
+                </div>
+                
+                <div class="form-group" id="contextOtherGroup" style="display: none;">
+                  <label class="form-label">Specify Context</label>
+                  <input type="text" class="form-input" id="contextOther" placeholder="Describe the context">
+                </div>
+                
+                <div class="form-group">
+                  <label class="form-label">Location</label>
+                  <input type="text" class="form-input" id="location" value="${state.currentEntry.location}">
+                </div>
+                
+                <div class="form-group">
+                  <label class="form-label">Witness Present</label>
+                  <input type="text" class="form-input" id="witnessPresent" placeholder="Name of witness (if any)">
+                </div>
+                
+                <!-- Observations -->
+                <div class="form-group">
+                  <label class="form-label">Observations</label>
+                  <button type="button" class="btn btn-primary" style="width: 100%; margin-bottom: 12px;" onclick="addObservation()">
+                    ➕ Add Observation
+                  </button>
+                  <div id="observations-container">
+                    ${state.currentEntry.observations.map((obs, idx) => `
+                      <div class="observation-item" id="obs-${idx}">
+                        <div class="observation-header">
+                          <span>Observation ${idx + 1}</span>
+                          <button type="button" onclick="removeObservation(${idx})" style="background: none; border: none; color: #dc2626; cursor: pointer; font-size: 18px;">
+                            ✕
+                          </button>
+                        </div>
+                        
+                        <div class="form-group">
+                          <label class="form-label">Body Area</label>
+                          <input type="text" class="form-input form-input-small" placeholder="e.g., Left arm, forehead" data-obs="${idx}" data-field="bodyArea">
+                        </div>
+                        
+                        <div class="form-group">
+                          <label class="form-label">Description</label>
+                          <textarea class="form-textarea" style="min-height: 60px;" placeholder="Describe what you observed..." data-obs="${idx}" data-field="observation"></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                          <label class="form-label">Parent Knowledge</label>
+                          <div class="radio-group" style="flex-direction: row;">
+                            <label class="radio-label" style="flex: 1;">
+                              <input type="radio" name="parentKnowledge-${idx}" value="Known">
+                              <span>Known</span>
+                            </label>
+                            <label class="radio-label" style="flex: 1;">
+                              <input type="radio" name="parentKnowledge-${idx}" value="Unknown">
+                              <span>Unknown</span>
+                            </label>
+                          </div>
+                        </div>
+                        
+                        <div class="form-group">
+                          <label class="form-label">Child Awareness</label>
+                          <div class="radio-group" style="flex-direction: row;">
+                            <label class="radio-label" style="flex: 1;">
+                              <input type="radio" name="childAware-${idx}" value="aware">
+                              <span>Aware</span>
+                            </label>
+                            <label class="radio-label" style="flex: 1;">
+                              <input type="radio" name="childAware-${idx}" value="unaware">
+                              <span>Unaware</span>
+                            </label>
+                          </div>
+                        </div>
+                        
+                        <div class="form-group">
+                          <label class="form-label">Child's Explanation</label>
+                          <input type="text" class="form-input form-input-small" placeholder="What did the child say?" data-obs="${idx}" data-field="childExplanation">
+                        </div>
+                        
+                        <div class="form-group">
+                          <label class="form-label">Child Demeanor While Discussing</label>
+                          <div class="checkbox-group">
+                            ${['Happy', 'Neutral', 'Uncomfortable', 'Defensive', 'Dismissive'].map(d => `
+                              <label class="checkbox-label">
+                                <input type="checkbox" value="${d}" data-obs="${idx}" data-field="childDemeanorDiscussing">
+                                <span>${d}</span>
+                              </label>
+                            `).join('')}
+                          </div>
+                        </div>
+                        
+                        <div class="form-group">
+                          <label class="form-label">Notes</label>
+                          <input type="text" class="form-input form-input-small" placeholder="Additional notes" data-obs="${idx}" data-field="notes">
+                        </div>
+                      </div>
+                    `).join('')}
+                  </div>
+                </div>
+                
+                <!-- Overall Demeanor -->
+                <div class="form-group">
+                  <label class="form-label">Overall Child Demeanor</label>
+                  <div class="checkbox-group">
+                    ${['Happy/Playful', 'Calm/Neutral', 'Tired', 'Withdrawn', 'Upset/Distressed'].map(d => `
+                      <label class="checkbox-label">
+                        <input type="checkbox" value="${d}" name="demeanor">
+                        <span>${d}</span>
+                      </label>
+                    `).join('')}
+                  </div>
+                </div>
+                
+                <!-- Photos -->
+                <div class="form-group">
+                  <label class="form-label">Photos</label>
+                  <input type="file" accept="image/*" multiple onchange="handlePhotoUpload(event)" style="margin-bottom: 12px;">
+                  <div class="photo-grid" id="photo-grid">
+                    ${state.currentEntry.photos.map((photo, idx) => `
+                      <div class="photo-item">
+                        <img src="${photo.data}" alt="Photo ${idx + 1}">
+                        <button type="button" class="photo-delete" onclick="removePhoto(${idx})">✕</button>
+                        <div class="photo-caption">${photo.name}</div>
+                      </div>
+                    `).join('')}
+                  </div>
+                </div>
+                
+                <!-- Additional Observations -->
+                <div class="form-group">
+                  <label class="form-label">Additional Observations</label>
+                  <textarea class="form-textarea" id="additionalObservations" placeholder="Any other relevant information..."></textarea>
+                </div>
+                
+                <!-- Buttons -->
+                <div style="display: flex; gap: 10px; margin-top: 20px;">
+                  <button type="button" class="btn btn-secondary" onclick="cancelForm()" style="flex: 1;">
+                    Cancel
+                  </button>
+                  <button type="submit" class="btn btn-primary" style="flex: 2;">
+                    💾 Save Entry
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        `;
+        
+        // Add event listeners
+        setTimeout(() => {
+          document.getElementById('child').value = state.currentEntry.child;
+          document.getElementById('child').onchange = (e) => state.currentEntry.child = e.target.value;
+          
+          document.getElementById('date').onchange = (e) => state.currentEntry.date = e.target.value;
+          document.getElementById('location').oninput = (e) => state.currentEntry.location = e.target.value;
+          document.getElementById('witnessPresent').oninput = (e) => state.currentEntry.witnessPresent = e.target.value;
+          document.getElementById('quickNotes').oninput = (e) => state.currentEntry.quickNotes = e.target.value;
+          document.getElementById('additionalObservations').oninput = (e) => state.currentEntry.additionalObservations = e.target.value;
+          document.getElementById('contextOther').oninput = (e) => state.currentEntry.contextOther = e.target.value;
+          
+          document.querySelectorAll('input[name="context"]').forEach(radio => {
+            radio.onchange = (e) => {
+              state.currentEntry.context = e.target.value;
+              document.getElementById('contextOtherGroup').style.display = 
+                e.target.value === 'Other' ? 'block' : 'none';
+            };
+          });
+          
+          document.querySelectorAll('input[name="demeanor"]').forEach(checkbox => {
+            checkbox.onchange = () => {
+              state.currentEntry.demeanor = Array.from(document.querySelectorAll('input[name="demeanor"]:checked'))
+                .map(cb => cb.value);
+            };
+          });
+          
+          // Observation field listeners
+          document.querySelectorAll('[data-obs]').forEach(field => {
+            const obsIdx = parseInt(field.dataset.obs);
+            const fieldName = field.dataset.field;
+            
+            if (field.type === 'checkbox' && fieldName === 'childDemeanorDiscussing') {
+              field.onchange = () => {
+                state.currentEntry.observations[obsIdx].childDemeanorDiscussing = 
+                  Array.from(document.querySelectorAll(`[data-obs="${obsIdx}"][data-field="childDemeanorDiscussing"]:checked`))
+                    .map(cb => cb.value);
+              };
+            } else {
+              field.oninput = (e) => {
+                state.currentEntry.observations[obsIdx][fieldName] = e.target.value;
+              };
+            }
+          });
+          
+          // Parent knowledge and child awareness
+          document.querySelectorAll('[name^="parentKnowledge-"]').forEach(radio => {
+            radio.onchange = (e) => {
+              const obsIdx = parseInt(e.target.name.split('-')[1]);
+              state.currentEntry.observations[obsIdx].parentKnowledge = e.target.value;
+            };
+          });
+          
+          document.querySelectorAll('[name^="childAware-"]').forEach(radio => {
+            radio.onchange = (e) => {
+              const obsIdx = parseInt(e.target.name.split('-')[1]);
+              state.currentEntry.observations[obsIdx].childAware = e.target.value;
+            };
+          });
+        }, 0);
+      }
+    }
+    
+    function exportEntry(id) {
+      const entry = state.entries.find(e => e.id === id);
+      if (entry) exportEntry(entry);
+    }
+    
+    function exportComparison(idx) {
+      const pairs = getBeforeAfterPairs();
+      if (pairs[idx]) {
+        // Export both as separate files or combined
+        exportEntry(pairs[idx].before);
+        setTimeout(() => exportEntry(pairs[idx].after), 500);
+      }
+    }
+    
+    function cancelForm() {
+      state.currentEntry = null;
+      state.view = 'list';
+      render();
+    }
+    
+    // Initialize
+    loadEntries();
+    initDarkMode();
+    initVoiceRecognition();
+    render();
+  </script>
+</body>
+</html>
