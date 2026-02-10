@@ -1138,12 +1138,20 @@
                   <button class="btn btn-purple" onclick="toggleComparison()">
                     🔄 Compare
                   </button>
+                  <button class="btn btn-success" onclick="exportAllData()">
+                    📤 Export
+                  </button>
+                  <button class="btn btn-secondary" onclick="document.getElementById('import-file').click()">
+                    📥 Import
+                  </button>
                   <button class="btn btn-primary" onclick="createEntry()">
                     ➕ New Entry
                   </button>
                 </div>
               </div>
-              
+
+              <input type="file" id="import-file" accept=".json" onchange="importData(event)" style="display: none;">
+
               ${state.message ? `<div class="message message-${state.message.type}">${state.message.text}</div>` : ''}
               
               ${state.entries.length === 0 ? `
