@@ -591,272 +591,262 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Documentation - ${entry.child}</title>
   <style>
+    @page {
+      size: letter;
+      margin: 10mm 12mm;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: 'Helvetica Neue', Arial, sans-serif;
-      max-width: 800px;
-      margin: 40px auto;
-      padding: 0 20px;
-      line-height: 1.6;
+      font-size: 8.5pt;
+      line-height: 1.35;
       color: #1a1a1a;
+      max-width: 100%;
     }
-    h1 {
-      color: #1e40af;
-      border-bottom: 3px solid #2563eb;
-      padding-bottom: 10px;
-      text-align: center;
-    }
-    .entry-number {
-      text-align: center;
-      color: #64748b;
-      margin-bottom: 20px;
-    }
-    .quick-notes {
-      background: linear-gradient(to right, #fef3c7, #fef9e7);
-      border-left: 4px solid #f59e0b;
-      padding: 12px 15px;
-      margin: 20px 0;
+
+    /* --- Header banner --- */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #1e40af;
+      color: white;
+      padding: 6px 12px;
       border-radius: 4px;
+      margin-bottom: 6px;
+    }
+    .header-left {
+      font-weight: 700;
+      font-size: 11pt;
+    }
+    .header-right {
+      font-size: 8pt;
+      text-align: right;
+      opacity: 0.9;
+    }
+
+    /* --- Quick notes --- */
+    .quick-notes {
+      background: #fef3c7;
+      border-left: 3px solid #f59e0b;
+      padding: 4px 8px;
+      margin-bottom: 6px;
+      font-size: 8pt;
+      border-radius: 2px;
     }
     .quick-notes strong { color: #92400e; }
-    .info-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px 20px;
-      background: #f8fafc;
-      padding: 15px;
-      border-radius: 6px;
-      margin-bottom: 20px;
-      border: 1px solid #e2e8f0;
-    }
-    .info-item {
+
+    /* --- Info strip --- */
+    .info-strip {
       display: flex;
-      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 2px 12px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 3px;
+      padding: 5px 8px;
+      margin-bottom: 6px;
+      font-size: 8pt;
     }
-    .label {
+    .info-tag {
+      white-space: nowrap;
+    }
+    .info-tag .lbl {
+      color: #64748b;
       font-weight: 600;
-      color: #475569;
-      min-width: 120px;
-      font-size: 9pt;
     }
-    .value {
+    .info-tag .val {
       color: #1e293b;
       font-weight: 500;
     }
-    .value.highlight {
-      background: #dbeafe;
-      padding: 2px 6px;
-      border-radius: 3px;
+
+    /* --- Section labels --- */
+    .sec-label {
+      font-weight: 700;
+      font-size: 8.5pt;
       color: #1e40af;
+      border-bottom: 1.5px solid #2563eb;
+      padding-bottom: 2px;
+      margin: 6px 0 4px 0;
     }
-    .section {
-      margin: 20px 0;
-    }
-    .section-header {
-      background: linear-gradient(to right, #1e40af, #3b82f6);
-      color: white;
-      padding: 8px 12px;
-      font-weight: 600;
-      margin-bottom: 12px;
-      border-radius: 4px;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 10px 0;
-      font-size: 9pt;
-    }
-    th, td {
+
+    /* --- Observations as compact cards --- */
+    .obs-card {
       border: 1px solid #e2e8f0;
-      padding: 10px 8px;
-      text-align: left;
-      vertical-align: top;
+      border-radius: 3px;
+      padding: 5px 7px;
+      margin-bottom: 4px;
+      background: #fafbfc;
+      page-break-inside: avoid;
     }
-    th {
-      background: #1e40af;
-      color: white;
+    .obs-card-header {
+      font-weight: 700;
+      color: #1e40af;
+      font-size: 8.5pt;
+      margin-bottom: 2px;
+    }
+    .obs-row {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      font-size: 8pt;
+    }
+    .obs-field {
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+    .obs-field .olbl {
+      color: #64748b;
       font-weight: 600;
+      font-size: 7.5pt;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
     }
-    tr:nth-child(even) td { background: #f8fafc; }
-    .demeanor-chips {
+
+    /* --- Demeanor inline --- */
+    .demeanor-row {
       display: flex;
       flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 8px;
+      gap: 4px;
+      margin-top: 3px;
     }
-    .demeanor-chip {
+    .dem-chip {
       background: #ecfdf5;
       color: #065f46;
-      padding: 6px 12px;
-      border-radius: 16px;
-      font-size: 9pt;
+      padding: 1px 8px;
+      border-radius: 10px;
+      font-size: 7.5pt;
       border: 1px solid #a7f3d0;
     }
+
+    /* --- Photos --- */
     .photo-grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 15px;
-      margin: 12px 0;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      margin-top: 4px;
     }
-    .photo-container {
-      border: 2px solid #e2e8f0;
-      border-radius: 6px;
+    .photo-box {
+      border: 1px solid #e2e8f0;
+      border-radius: 3px;
       overflow: hidden;
     }
-    .photo-container img {
+    .photo-box img {
       width: 100%;
       height: auto;
       display: block;
+      max-height: 140px;
+      object-fit: cover;
     }
-    .photo-caption {
-      padding: 8px;
+    .photo-box .pcap {
+      padding: 2px 4px;
+      font-size: 6.5pt;
+      color: #64748b;
       background: #f8fafc;
       border-top: 1px solid #e2e8f0;
+    }
+
+    /* --- Additional observations --- */
+    .addl-obs {
+      background: #fefce8;
+      border-left: 3px solid #eab308;
+      padding: 4px 8px;
+      border-radius: 2px;
       font-size: 8pt;
-      color: #64748b;
+      margin-top: 4px;
     }
+
+    /* --- Footer --- */
     .footer {
-      margin-top: 40px;
-      padding-top: 20px;
-      border-top: 2px solid #e2e8f0;
-      font-size: 9pt;
+      margin-top: 8px;
+      padding-top: 4px;
+      border-top: 1.5px solid #cbd5e1;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      font-size: 7pt;
       color: #64748b;
     }
-    .signature-line {
-      margin-top: 40px;
-      padding-top: 2px;
+    .footer-left div { margin-bottom: 1px; }
+    .sig-line {
       border-top: 1px solid #1e293b;
-      width: 250px;
+      width: 180px;
+      padding-top: 1px;
+      font-size: 7pt;
+      text-align: center;
     }
+
     @media print {
       body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     }
   </style>
 </head>
 <body>
-  <h1>Child Documentation Log</h1>
-  <div class="entry-number">Entry #${entry.entryNumber}</div>
-  
+
+  <div class="header">
+    <div class="header-left">${entry.child} — Entry #${entry.entryNumber}</div>
+    <div class="header-right">${entry.date} &nbsp;|&nbsp; ${new Date(entry.timestamp).toLocaleTimeString()}</div>
+  </div>
+
   ${entry.quickNotes ? `
-    <div class="quick-notes">
-      <strong>⚠️ Quick Notes:</strong><br>
-      ${entry.quickNotes}
-    </div>
+    <div class="quick-notes"><strong>Note:</strong> ${entry.quickNotes}</div>
   ` : ''}
-  
-  <div class="info-grid">
-    <div class="info-item">
-      <span class="label">Child:</span>
-      <span class="value highlight">${entry.child}</span>
-    </div>
-    <div class="info-item">
-      <span class="label">Age:</span>
-      <span class="value">${calculatedAge || 'Not specified'}</span>
-    </div>
-    <div class="info-item">
-      <span class="label">Date:</span>
-      <span class="value">${entry.date}</span>
-    </div>
-    <div class="info-item">
-      <span class="label">Time:</span>
-      <span class="value">${new Date(entry.timestamp).toLocaleTimeString()}</span>
-    </div>
-    <div class="info-item">
-      <span class="label">Location:</span>
-      <span class="value">${entry.location || 'Not specified'}</span>
-    </div>
-    <div class="info-item">
-      <span class="label">Context:</span>
-      <span class="value">${entry.context}${entry.contextOther ? ` (${entry.contextOther})` : ''}</span>
-    </div>
-    ${entry.witnessPresent ? `
-      <div class="info-item" style="grid-column: span 2;">
-        <span class="label">Witness:</span>
-        <span class="value">${entry.witnessPresent}</span>
-      </div>
-    ` : ''}
+
+  <div class="info-strip">
+    <span class="info-tag"><span class="lbl">Age:</span> <span class="val">${calculatedAge || '—'}</span></span>
+    <span class="info-tag"><span class="lbl">Location:</span> <span class="val">${entry.location || '—'}</span></span>
+    <span class="info-tag"><span class="lbl">Context:</span> <span class="val">${entry.context}${entry.contextOther ? ' (' + entry.contextOther + ')' : ''}</span></span>
+    ${entry.witnessPresent ? `<span class="info-tag"><span class="lbl">Witness:</span> <span class="val">${entry.witnessPresent}</span></span>` : ''}
   </div>
-  
+
   ${entry.observations.length > 0 ? `
-    <div class="section">
-      <div class="section-header">📝 Physical Observations</div>
-      <table>
-        <thead>
-          <tr>
-            <th>Body Area</th>
-            <th>Description</th>
-            <th>Child Response</th>
-            <th>Parent Knowledge</th>
-            <th>Notes</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${entry.observations.map(obs => `
-            <tr>
-              <td>${obs.bodyArea || '—'}</td>
-              <td>${obs.observation || '—'}</td>
-              <td>
-                ${obs.childAware === 'aware' ? '✓ Child aware' : obs.childAware === 'unaware' ? '✗ Child unaware' : '—'}
-                ${obs.childExplanation ? `<br><em>"${obs.childExplanation}"</em>` : ''}
-                ${obs.childDemeanorDiscussing.length > 0 ? `<br>Demeanor: ${obs.childDemeanorDiscussing.join(', ')}` : ''}
-              </td>
-              <td>${obs.parentKnowledge || '—'}</td>
-              <td>${obs.notes || '—'}</td>
-            </tr>
-          `).join('')}
-        </tbody>
-      </table>
-    </div>
+    <div class="sec-label">Physical Observations</div>
+    ${entry.observations.map(obs => `
+      <div class="obs-card">
+        <div class="obs-card-header">${obs.bodyArea || 'General'}</div>
+        <div class="obs-row">
+          <div class="obs-field" style="flex:2"><span class="olbl">Description</span><br>${obs.observation || '—'}</div>
+          <div class="obs-field" style="flex:1"><span class="olbl">Child Awareness</span><br>${obs.childAware === 'aware' ? '✓ Aware' : obs.childAware === 'unaware' ? '✗ Unaware' : '—'}${obs.childExplanation ? ' — <em>"' + obs.childExplanation + '"</em>' : ''}</div>
+          <div class="obs-field" style="flex:0.6"><span class="olbl">Parent Knowledge</span><br>${obs.parentKnowledge || '—'}</div>
+        </div>
+        ${obs.childDemeanorDiscussing && obs.childDemeanorDiscussing.length > 0 ? `<div style="margin-top:2px;font-size:7.5pt;"><span class="olbl">Demeanor while discussing:</span> ${obs.childDemeanorDiscussing.join(', ')}</div>` : ''}
+        ${obs.notes ? `<div style="margin-top:2px;font-size:7.5pt;"><span class="olbl">Notes:</span> ${obs.notes}</div>` : ''}
+      </div>
+    `).join('')}
   ` : ''}
-  
+
   ${entry.demeanor.length > 0 ? `
-    <div class="section">
-      <div class="section-header">😊 Overall Child Demeanor</div>
-      <div class="demeanor-chips">
-        ${entry.demeanor.map(d => `<span class="demeanor-chip">${d}</span>`).join('')}
-      </div>
+    <div class="sec-label">Overall Demeanor</div>
+    <div class="demeanor-row">
+      ${entry.demeanor.map(d => `<span class="dem-chip">${d}</span>`).join('')}
     </div>
   ` : ''}
-  
+
   ${entry.photos.length > 0 ? `
-    <div class="section">
-      <div class="section-header">📷 Photographic Documentation (${entry.photos.length})</div>
-      <p style="font-size: 9pt; color: #64748b; margin-bottom: 10px;">
-        <strong>Original Files:</strong> Stored in ${entry.storageLocation}
-      </p>
-      <div class="photo-grid">
-        ${entry.photos.map((photo, idx) => `
-          <div class="photo-container">
-            <img src="${photo.data}" alt="Photo ${idx + 1}">
-            <div class="photo-caption">
-              <strong>Photo ${idx + 1}</strong> - ${photo.name}<br>
-              ${new Date(photo.timestamp).toLocaleString()}
-            </div>
-          </div>
-        `).join('')}
-      </div>
+    <div class="sec-label">Photos (${entry.photos.length}) <span style="font-weight:400;font-size:7pt;color:#64748b;">— originals in ${entry.storageLocation}</span></div>
+    <div class="photo-grid">
+      ${entry.photos.map((photo, idx) => `
+        <div class="photo-box">
+          <img src="${photo.data}" alt="Photo ${idx + 1}">
+          <div class="pcap">${photo.name} — ${new Date(photo.timestamp).toLocaleString()}</div>
+        </div>
+      `).join('')}
     </div>
   ` : ''}
-  
+
   ${entry.additionalObservations ? `
-    <div class="section">
-      <div class="section-header">📄 Additional Observations</div>
-      <div style="background: #fefce8; border-left: 4px solid #eab308; padding: 12px; border-radius: 4px;">
-        ${entry.additionalObservations}
-      </div>
-    </div>
+    <div class="sec-label">Additional Observations</div>
+    <div class="addl-obs">${entry.additionalObservations}</div>
   ` : ''}
-  
+
   <div class="footer">
-    <div><strong>Logged by:</strong> ${entry.loggedBy}</div>
-    <div><strong>Date Logged:</strong> ${entry.dateLogged}</div>
-    <div><strong>Generated:</strong> ${new Date().toLocaleString()}</div>
-    <div style="margin-top: 10px; font-style: italic;">
-      Original records maintained by Tamas Kiss for legal chain of custody.
+    <div class="footer-left">
+      <div><strong>Logged by:</strong> ${entry.loggedBy} &nbsp;|&nbsp; <strong>Date:</strong> ${entry.dateLogged} &nbsp;|&nbsp; <strong>Generated:</strong> ${new Date().toLocaleString()}</div>
+      <div style="font-style:italic;">Original records maintained by Tamas Kiss for legal chain of custody.</div>
     </div>
-    <div class="signature-line">
-      Signature: ___________________________
-    </div>
+    <div class="sig-line">Signature</div>
   </div>
+
 </body>
 </html>`;
       
