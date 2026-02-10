@@ -587,6 +587,91 @@
       }
     }
 
+    // Export all data
+    function exportAllData() {
+      if (state.entries.length === 0) {
+        showMessage('No data to export', 'error');
+        return;
+      }
+
+      const exportData = {
+        version: '1.0',
+        exportDate: new Date().toISOString(),
+        entries: state.entries,
+        deviceInfo: navigator.userAgent
+      };
+
+      const dataStr = JSON.stringify(exportData, null, 2);
+      const blob = new Blob([dataStr], { type: 'application/json' });
+      const filename = `child-docs-backup-${new Date().toISOString().split('T')[0]}.json`;
+
+      // Try iOS Share Sheet first
+      if (navigator.share && navigator.canShare({ files: [new File([blob], filename)] })) {
+        const file = new File([blob], filename, { type: 'application/json' });
+        navigator.share({
+          title: 'Child Documentation Backup',
+          text: `Backup of ${state.entries.length} entries`,
+          files: [file]
+        })
+        .then(() => showMessage('✓ Data exported! Save to iCloud Drive.'))
+        .catch(err => {
+          console.error('Share failed:', err);
+          downloadFile(blob, filename);
+        });
+      } else {
+        downloadFile(blob, filename);
+      }
+    }
+
+    // Import data
+    function importData(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        try {
+          const importData = JSON.parse(event.target.result);
+
+          if (!importData.entries || !Array.isArray(importData.entries)) {
+            showMessage('Invalid backup file format', 'error');
+            return;
+          }
+
+          // Ask user: merge or replace?
+          const action = confirm(
+            `Found ${importData.entries.length} entries in backup.\n\n` +
+            `You currently have ${state.entries.length} entries.\n\n` +
+            `Click OK to MERGE (keep both)\n` +
+            `Click Cancel to REPLACE (delete current data)`
+          );
+
+          if (action) {
+            // Merge: add imported entries that don't exist
+            const existingIds = new Set(state.entries.map(e => e.id));
+            const newEntries = importData.entries.filter(e => !existingIds.has(e.id));
+            state.entries = [...state.entries, ...newEntries];
+            showMessage(`✓ Merged! Added ${newEntries.length} new entries.`);
+          } else {
+            // Replace: overwrite all data
+            state.entries = importData.entries;
+            showMessage(`✓ Replaced! Loaded ${state.entries.length} entries.`);
+          }
+
+          saveEntries();
+          state.view = 'list';
+          render();
+        } catch (err) {
+          console.error('Import error:', err);
+          showMessage('Failed to import: Invalid file format', 'error');
+        }
+      };
+
+      reader.readAsText(file);
+      // Reset file input
+      e.target.value = '';
+    }
+
     // View entry detail
     function viewEntry(id) {
       const entry = state.entries.find(e => e.id === id);
