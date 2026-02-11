@@ -1577,23 +1577,23 @@ body.dark-mode input[type="checkbox"]:checked::before{
                         
                         <div class="form-group">
                           <label class="form-label">Body Area</label>
-                          <input type="text" class="form-input form-input-small" placeholder="e.g., Left arm, forehead" data-obs="${idx}" data-field="bodyArea">
+                          <input type="text" class="form-input form-input-small" value="${obs.bodyArea || ''}" placeholder="e.g., Left arm, forehead" data-obs="${idx}" data-field="bodyArea">
                         </div>
                         
                         <div class="form-group">
                           <label class="form-label">Description</label>
-                          <textarea class="form-textarea" style="min-height: 60px;" placeholder="Describe what you observed..." data-obs="${idx}" data-field="observation"></textarea>
+                          <textarea class="form-textarea" style="min-height: 60px;" placeholder="Describe what you observed..." data-obs="${idx}" data-field="observation">${obs.observation || ''}</textarea>
                         </div>
                         
                         <div class="form-group">
                           <label class="form-label">Parent Knowledge</label>
                           <div class="radio-group" style="flex-direction: row;">
                             <label class="radio-label" style="flex: 1;">
-                              <input type="radio" name="parentKnowledge-${idx}" value="Known">
+                              <input type="radio" name="parentKnowledge-${idx}" value="Known" ${obs.parentKnowledge === 'Known' ? 'checked' : ''}>
                               <span>Known</span>
                             </label>
                             <label class="radio-label" style="flex: 1;">
-                              <input type="radio" name="parentKnowledge-${idx}" value="Unknown">
+                              <input type="radio" name="parentKnowledge-${idx}" value="Unknown" ${obs.parentKnowledge === 'Unknown' ? 'checked' : ''}>
                               <span>Unknown</span>
                             </label>
                           </div>
@@ -1603,11 +1603,11 @@ body.dark-mode input[type="checkbox"]:checked::before{
                           <label class="form-label">Child Awareness</label>
                           <div class="radio-group" style="flex-direction: row;">
                             <label class="radio-label" style="flex: 1;">
-                              <input type="radio" name="childAware-${idx}" value="aware">
+                              <input type="radio" name="childAware-${idx}" value="aware" ${obs.childAware === 'aware' ? 'checked' : ''}>
                               <span>Aware</span>
                             </label>
                             <label class="radio-label" style="flex: 1;">
-                              <input type="radio" name="childAware-${idx}" value="unaware">
+                              <input type="radio" name="childAware-${idx}" value="unaware" ${obs.childAware === 'unaware' ? 'checked' : ''}>
                               <span>Unaware</span>
                             </label>
                           </div>
@@ -1615,7 +1615,7 @@ body.dark-mode input[type="checkbox"]:checked::before{
                         
                         <div class="form-group">
                           <label class="form-label">Child's Explanation</label>
-                          <input type="text" class="form-input form-input-small" placeholder="What did the child say?" data-obs="${idx}" data-field="childExplanation">
+                          <input type="text" class="form-input form-input-small" value="${obs.childExplanation || ''}" placeholder="What did the child say?" data-obs="${idx}" data-field="childExplanation">
                         </div>
                         
                         <div class="form-group">
@@ -1623,7 +1623,7 @@ body.dark-mode input[type="checkbox"]:checked::before{
                           <div class="checkbox-group">
                             ${['Happy', 'Neutral', 'Uncomfortable', 'Defensive', 'Dismissive'].map(d => `
                               <label class="checkbox-label">
-                                <input type="checkbox" value="${d}" data-obs="${idx}" data-field="childDemeanorDiscussing">
+                                <input type="checkbox" value="${d}" data-obs="${idx}" data-field="childDemeanorDiscussing" ${(obs.childDemeanorDiscussing || []).includes(d) ? 'checked' : ''}>
                                 <span>${d}</span>
                               </label>
                             `).join('')}
@@ -1632,7 +1632,7 @@ body.dark-mode input[type="checkbox"]:checked::before{
                         
                         <div class="form-group">
                           <label class="form-label">Notes</label>
-                          <input type="text" class="form-input form-input-small" placeholder="Additional notes" data-obs="${idx}" data-field="notes">
+                          <input type="text" class="form-input form-input-small" value="${obs.notes || ''}" placeholder="Additional notes" data-obs="${idx}" data-field="notes">
                         </div>
                       </div>
                     `).join('')}
@@ -1645,7 +1645,7 @@ body.dark-mode input[type="checkbox"]:checked::before{
                   <div class="checkbox-group">
                     ${['Happy/Playful', 'Calm/Neutral', 'Tired', 'Withdrawn', 'Upset/Distressed'].map(d => `
                       <label class="checkbox-label">
-                        <input type="checkbox" value="${d}" name="demeanor">
+                        <input type="checkbox" value="${d}" name="demeanor" ${(state.currentEntry.demeanor || []).includes(d) ? 'checked' : ''}>
                         <span>${d}</span>
                       </label>
                     `).join('')}
