@@ -1508,7 +1508,7 @@ body.dark-mode input[type="checkbox"]:checked::before{
                 <!-- Quick Notes -->
                 <div class="quick-notes-section">
                   <label class="form-label">Quick Notes</label>
-                  <input type="text" class="form-input" id="quickNotes" placeholder="e.g., Returned 30 minutes late">
+                  <input type="text" class="form-input" id="quickNotes" value="${state.currentEntry.quickNotes || ''}" placeholder="e.g., Returned 30 minutes late">
                 </div>
                 
                 <!-- Basic Info -->
@@ -1544,9 +1544,9 @@ body.dark-mode input[type="checkbox"]:checked::before{
                   </div>
                 </div>
                 
-                <div class="form-group" id="contextOtherGroup" style="display: none;">
+                <div class="form-group" id="contextOtherGroup" style="display: ${state.currentEntry.context === 'Other' ? 'block' : 'none'};">
                   <label class="form-label">Specify Context</label>
-                  <input type="text" class="form-input" id="contextOther" placeholder="Describe the context">
+                  <input type="text" class="form-input" id="contextOther" value="${state.currentEntry.contextOther || ''}" placeholder="Describe the context">
                 </div>
                 
                 <div class="form-group">
@@ -1556,7 +1556,7 @@ body.dark-mode input[type="checkbox"]:checked::before{
                 
                 <div class="form-group">
                   <label class="form-label">Witness Present</label>
-                  <input type="text" class="form-input" id="witnessPresent" placeholder="Name of witness (if any)">
+                  <input type="text" class="form-input" id="witnessPresent" value="${state.currentEntry.witnessPresent || ''}" placeholder="Name of witness (if any)">
                 </div>
                 
                 <!-- Observations -->
@@ -1670,7 +1670,7 @@ body.dark-mode input[type="checkbox"]:checked::before{
                 <!-- Additional Observations -->
                 <div class="form-group">
                   <label class="form-label">Additional Observations</label>
-                  <textarea class="form-textarea" id="additionalObservations" placeholder="Any other relevant information..."></textarea>
+                  <textarea class="form-textarea" id="additionalObservations" placeholder="Any other relevant information...">${state.currentEntry.additionalObservations || ''}</textarea>
                 </div>
                 
                 <!-- Buttons -->
@@ -1691,6 +1691,10 @@ body.dark-mode input[type="checkbox"]:checked::before{
         setTimeout(() => {
           document.getElementById('child').value = state.currentEntry.child;
           document.getElementById('child').onchange = (e) => state.currentEntry.child = e.target.value;
+
+          document.querySelectorAll('input[name="context"]').forEach(radio => {
+            radio.checked = radio.value === state.currentEntry.context;
+          });
           
           document.getElementById('date').onchange = (e) => state.currentEntry.date = e.target.value;
           document.getElementById('location').oninput = (e) => state.currentEntry.location = e.target.value;
