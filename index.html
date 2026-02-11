@@ -762,9 +762,51 @@ body.dark-mode input[type="checkbox"]:checked::before{
       render();
     }
     
+    function syncCurrentEntryFromForm() {
+      if (!state.currentEntry) return;
+
+      const child = document.getElementById('child');
+      const date = document.getElementById('date');
+      const location = document.getElementById('location');
+      const witnessPresent = document.getElementById('witnessPresent');
+      const quickNotes = document.getElementById('quickNotes');
+      const additionalObservations = document.getElementById('additionalObservations');
+      const contextOther = document.getElementById('contextOther');
+
+      if (child) state.currentEntry.child = child.value;
+      if (date) state.currentEntry.date = date.value;
+      if (location) state.currentEntry.location = location.value;
+      if (witnessPresent) state.currentEntry.witnessPresent = witnessPresent.value;
+      if (quickNotes) state.currentEntry.quickNotes = quickNotes.value;
+      if (additionalObservations) state.currentEntry.additionalObservations = additionalObservations.value;
+      if (contextOther) state.currentEntry.contextOther = contextOther.value;
+
+      const selectedContext = document.querySelector('input[name="context"]:checked');
+      state.currentEntry.context = selectedContext ? selectedContext.value : '';
+
+      state.currentEntry.demeanor = Array.from(document.querySelectorAll('input[name="demeanor"]:checked'))
+        .map(cb => cb.value);
+
+      state.currentEntry.observations = state.currentEntry.observations.map((obs, idx) => {
+        const getVal = (field) => document.querySelector(`[data-obs="${idx}"][data-field="${field}"]`)?.value || '';
+
+        return {
+          ...obs,
+          bodyArea: getVal('bodyArea'),
+          observation: getVal('observation'),
+          childExplanation: getVal('childExplanation'),
+          notes: getVal('notes'),
+          childDemeanorDiscussing: Array.from(document.querySelectorAll(`[data-obs="${idx}"][data-field="childDemeanorDiscussing"]:checked`)).map(cb => cb.value),
+          parentKnowledge: document.querySelector(`[name="parentKnowledge-${idx}"]:checked`)?.value || '',
+          childAware: document.querySelector(`[name="childAware-${idx}"]:checked`)?.value || ''
+        };
+      });
+    }
+
     // Save entry
     function saveEntry(e) {
       e.preventDefault();
+      syncCurrentEntryFromForm();
       
       console.log('Saving entry:', state.currentEntry);
       console.log('Child:', state.currentEntry.child);
