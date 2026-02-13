@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>Child Documentation Log</title>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f3f4f6; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 24px; }
+    .card { background: white; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); padding: 24px; margin-bottom: 16px; }
+    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+    h1 { font-size: 28px; font-weight: bold; color: #1f2937; }
+    .btn { padding: 10px 20px; border-radius: 8px; border: none; font-weight: 500; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
+    .btn-primary { background: #2563eb; color: white; }
+    .btn-primary:hover { background: #1d4ed8; }
+    .btn-danger { background: #dc2626; color: white; }
+    .btn-success { background: #16a34a; color: white; }
+    .btn-secondary { background: #6b7280; color: white; }
+    .entry-item { border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px; margin-bottom: 12px; }
+    .entry-header { display: flex; justify-content: space-between; align-items: start; }
+    .entry-title { font-weight: 600; font-size: 18px; margin-bottom: 4px; }
+    .entry-meta { color: #6b7280; font-size: 14px; }
+    .actions { display: flex; gap: 8px; }
+    .form-group { margin-bottom: 16px; }
+    .form-label { display: block; font-weight: 500; margin-bottom: 8px; color: #374151; }
+    .form-input, .form-select { width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px; }
+    .radio-group { display: flex; flex-direction: column; gap: 8px; }
+    .radio-label { display: flex; align-items: center; gap: 8px; }
+    .empty-state { text-align: center; padding: 60px 20px; color: #6b7280; }
+    .message { padding: 12px; border-radius: 6px; margin-bottom: 16px; }
+    .message-success { background: #d1fae5; color: #065f46; border: 1px solid #6ee7b7; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script>
+    const { createElement: h, useState, useEffect } = React;
+    
+    function ChildDocumentationApp() {
+      const [entries, setEntries] = useState([]);
+      const [currentEntry, setCurrentEntry] = useState(null);
+      const [view, setView] = useState('list');
+      const [message, setMessage] = useState('');
+
+      const childDOBs = {
+        'Benjamin': '2016-06-17',
+        'Vincent': '2018-05-07'
+      };
+
+      // Load entries from localStorage
+      useEffect(() => {
+        const saved = localStorage.getItem('childDocEntries');
+        if (saved) {
+          try {
+            setEntries(JSON.parse(saved));
+          } catch (e) {
+            console.error('Error loading:', e);
+          }
+        }
+      }, []);
+
+      // Save entries to localStorage
+      useEffect(() => {
+        if (entries.length > 0) {
+          localStorage.setItem('childDocEntries', JSON.stringify(entries));
+        }
+      }, [entries]);
+
+      const createNewEntry = () => {
+        const now = new Date();
+        setCurrentEntry({
+          id: Date.now(),
+          entryNumber: entries.length + 1,
+          child: '',
+          date: now.toISOString().split('T')[0],
+          timestamp: now.toISOString(),
+          context: '',
+          contextOther: '',
+          location: 'Home (Springfield, MO)',
+          quickNotes: '',
+          observations: '',
+          demeanor: [],
+          loggedBy: 'Tamas Kiss',
+          dateLogged: now.toISOString().split('T')[0]
+        });
+        setView('form');
+      };
+
+      const saveEntry = () => {
+        if (!currentEntry.child || !currentEntry.date || !currentEntry.context) {
+          alert('Please fill in required fields');
+          return;
+        }
+
+        const entryToSave = {
+          ...currentEntry,
+          timestamp: new Date().toISOString()
+        };
+        
+        if (entryToSave.id && entries.find(e => e.id === entryToSave.id)) {
+          setEntries(entries.map(e => e.id === entryToSave.id ? entryToSave : e));
+        } else {
+          setEntries([...entries, entryToSave]);
+        }
+        setCurrentEntry(null);
+        setView('list');
+        setMessage('Entry saved successfully!');
+        setTimeout(() => setMessage(''), 3000);
+      };
+
+      const deleteEntry = (id) => {
+        if (confirm('Delete this entry?')) {
+          setEntries(entries.filter(e => e.id !== id));
+        }
+      };
+
+      const exportPDF = (entry) => {
+        const html = `<!DOCTYPE html>
+<html>
+<head><title>Documentation - ${entry.child}</title></head>
+<body style="font-family: Arial; padding: 40px; max-width: 800px; margin: 0 auto;">
+  <h1>Child Documentation Log</h1>
+  <hr>
+  <p><strong>Child:</strong> ${entry.child}</p>
+  <p><strong>Date:</strong> ${entry.date}</p>
+  <p><strong>Context:</strong> ${entry.context}</p>
+  <p><strong>Quick Notes:</strong> ${entry.quickNotes || 'None'}</p>
+  <p><strong>Observations:</strong> ${entry.observations || 'None'}</p>
+  <hr>
+  <p style="color: #666; font-size: 12px;">Generated: ${new Date().toLocaleString()}</p>
+  <p style="color: #666; font-size: 12px;">Logged by: ${entry.loggedBy}</p>
+</body>
+</html>`;
+
+        const blob = new Blob([html], { type: 'text/html' });
+        const filename = `${entry.child}-${entry.date}.html`;
+        
+        if (navigator.share && navigator.canShare({ files: [new File([blob], filename)] })) {
+          const file = new File([blob], filename, { type: 'text/html' });
+          navigator.share({ title: 'Documentation', files: [file] })
+            .then(() => {
+              setMessage('✓ Shared successfully!');
+              setTimeout(() => setMessage(''), 3000);
+            })
+            .catch(console.error);
+        } else {
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = filename;
+          a.click();
+          URL.revokeObjectURL(url);
+          setMessage('✓ Downloaded!');
+          setTimeout(() => setMessage(''), 3000);
+        }
+      };
+
+      // Render list view
+      if (view === 'list') {
+        return h('div', { className: 'container' },
+          h('div', { className: 'card' },
+            h('div', { className: 'header' },
+              h('h1', null, 'Child Documentation Log'),
+              h('button', { className: 'btn btn-primary', onClick: createNewEntry }, '+ New Entry')
+            ),
+            message && h('div', { className: 'message message-success' }, message),
+            entries.length === 0 ?
+              h('div', { className: 'empty-state' },
+                h('p', { style: { fontSize: '18px', marginBottom: '8px' } }, 'No entries yet'),
+                h('p', null, 'Create your first documentation entry')
+              ) :
+              h('div', null,
+                entries.map(entry =>
+                  h('div', { key: entry.id, className: 'entry-item' },
+                    h('div', { className: 'entry-header' },
+                      h('div', null,
+                        h('div', { className: 'entry-title' }, entry.child),
+                        h('div', { className: 'entry-meta' }, 
+                          entry.date + ' - ' + entry.context
+                        ),
+                        entry.quickNotes && h('div', { className: 'entry-meta', style: { marginTop: '8px', fontStyle: 'italic' } }, 
+                          entry.quickNotes
+                        )
+                      ),
+                      h('div', { className: 'actions' },
+                        h('button', { className: 'btn btn-success', onClick: () => exportPDF(entry) }, 'Export'),
+                        h('button', { className: 'btn btn-danger', onClick: () => deleteEntry(entry.id) }, 'Delete')
+                      )
+                    )
+                  )
+                )
+              )
+          )
+        );
+      }
+
+      // Render form view
+      if (view === 'form' && currentEntry) {
+        return h('div', { className: 'container' },
+          h('div', { className: 'card' },
+            h('h1', { style: { marginBottom: '24px' } }, 'New Entry'),
+            
+            h('div', { className: 'form-group' },
+              h('label', { className: 'form-label' }, 'Child *'),
+              h('select', {
+                className: 'form-select',
+                value: currentEntry.child,
+                onChange: (e) => setCurrentEntry({...currentEntry, child: e.target.value})
+              },
+                h('option', { value: '' }, 'Select child'),
+                h('option', { value: 'Benjamin' }, 'Benjamin'),
+                h('option', { value: 'Vincent' }, 'Vincent')
+              )
+            ),
+
+            h('div', { className: 'form-group' },
+              h('label', { className: 'form-label' }, 'Date *'),
+              h('input', {
+                type: 'date',
+                className: 'form-input',
+                value: currentEntry.date,
+                onChange: (e) => setCurrentEntry({...currentEntry, date: e.target.value})
+              })
+            ),
+
+            h('div', { className: 'form-group' },
+              h('label', { className: 'form-label' }, 'Context *'),
+              h('div', { className: 'radio-group' },
+                ['Before exchange', 'After exchange', 'Other'].map(ctx =>
+                  h('label', { key: ctx, className: 'radio-label' },
+                    h('input', {
+                      type: 'radio',
+                      checked: currentEntry.context === ctx,
+                      onChange: () => setCurrentEntry({...currentEntry, context: ctx})
+                    }),
+                    ctx
+                  )
+                )
+              )
+            ),
+
+            h('div', { className: 'form-group' },
+              h('label', { className: 'form-label' }, 'Quick Notes'),
+              h('input', {
+                type: 'text',
+                className: 'form-input',
+                value: currentEntry.quickNotes,
+                onChange: (e) => setCurrentEntry({...currentEntry, quickNotes: e.target.value}),
+                placeholder: 'e.g., Returned 30 minutes late'
+              })
+            ),
+
+            h('div', { className: 'form-group' },
+              h('label', { className: 'form-label' }, 'Observations'),
+              h('textarea', {
+                className: 'form-input',
+                value: currentEntry.observations,
+                onChange: (e) => setCurrentEntry({...currentEntry, observations: e.target.value}),
+                placeholder: 'Describe any observations...',
+                rows: 4,
+                style: { resize: 'vertical' }
+              })
+            ),
+
+            h('div', { style: { display: 'flex', gap: '12px' } },
+              h('button', {
+                className: 'btn btn-secondary',
+                onClick: () => { setCurrentEntry(null); setView('list'); }
+              }, 'Cancel'),
+              h('button', {
+                className: 'btn btn-primary',
+                onClick: saveEntry
+              }, 'Save Entry')
+            )
+          )
+        );
+      }
+
+      return null;
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(h(ChildDocumentationApp));
+  </script>
+</body>
+</html>
