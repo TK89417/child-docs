@@ -306,7 +306,160 @@
     }
     
     body.dark-mode .observation-header { color: #f3f4f6; }
-    
+
+    /* Detail view section boxes */
+    .detail-section {
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+
+    .detail-section-title {
+      font-weight: 600;
+      font-size: 15px;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #e5e7eb;
+      color: #1f2937;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .detail-section-title .section-icon {
+      font-size: 16px;
+    }
+
+    /* Info grid for Location / Witness / Time */
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 10px;
+    }
+
+    .info-cell {
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 10px 12px;
+    }
+
+    .info-cell-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: #6b7280;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+
+    .info-cell-value {
+      font-size: 14px;
+      color: #1f2937;
+      font-weight: 500;
+    }
+
+    /* Observation sub-fields */
+    .obs-fields-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    @media (max-width: 480px) {
+      .obs-fields-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .obs-field-card {
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 10px 12px;
+    }
+
+    .obs-field-card.full-width {
+      grid-column: 1 / -1;
+    }
+
+    .obs-field-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: #6b7280;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+
+    .obs-field-value {
+      font-size: 14px;
+      color: #1f2937;
+      line-height: 1.5;
+    }
+
+    /* Demeanor tag styling inside section box */
+    .demeanor-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .demeanor-tag {
+      background: #ecfdf5;
+      color: #065f46;
+      padding: 6px 16px;
+      border-radius: 16px;
+      font-size: 13px;
+      font-weight: 500;
+      border: 1px solid #a7f3d0;
+    }
+
+    /* Dark mode for detail sections */
+    body.dark-mode .detail-section {
+      background: #1f2937;
+      border-color: #374151;
+    }
+
+    body.dark-mode .detail-section-title {
+      color: #f3f4f6;
+      border-bottom-color: #374151;
+    }
+
+    body.dark-mode .info-cell {
+      background: #111827;
+      border-color: #374151;
+    }
+
+    body.dark-mode .info-cell-label {
+      color: #9ca3af;
+    }
+
+    body.dark-mode .info-cell-value {
+      color: #f3f4f6;
+    }
+
+    body.dark-mode .obs-field-card {
+      background: #111827;
+      border-color: #374151;
+    }
+
+    body.dark-mode .obs-field-label {
+      color: #9ca3af;
+    }
+
+    body.dark-mode .obs-field-value {
+      color: #f3f4f6;
+    }
+
+    body.dark-mode .demeanor-tag {
+      background: #064e3b;
+      color: #a7f3d0;
+      border-color: #065f46;
+    }
+
     /* Voice recording indicator */
     .recording {
       animation: pulse 1s ease-in-out infinite;
@@ -1426,51 +1579,98 @@ body.dark-mode input[type="checkbox"]:checked::before{
                 </div>
               ` : ''}
 
-              <div style="margin-bottom: 16px;">
-                <div class="entry-meta"><strong>Location:</strong> ${entry.location || '—'}</div>
-                ${entry.witnessPresent ? `<div class="entry-meta"><strong>Witness:</strong> ${entry.witnessPresent}</div>` : ''}
-                <div class="entry-meta"><strong>Time:</strong> ${new Date(entry.timestamp).toLocaleTimeString()}</div>
+              <div class="detail-section">
+                <div class="detail-section-title"><span class="section-icon">📋</span> Entry Details</div>
+                <div class="info-grid">
+                  <div class="info-cell">
+                    <div class="info-cell-label">Location</div>
+                    <div class="info-cell-value">${entry.location || '—'}</div>
+                  </div>
+                  ${entry.witnessPresent ? `
+                  <div class="info-cell">
+                    <div class="info-cell-label">Witness</div>
+                    <div class="info-cell-value">${entry.witnessPresent}</div>
+                  </div>` : ''}
+                  <div class="info-cell">
+                    <div class="info-cell-label">Time</div>
+                    <div class="info-cell-value">${new Date(entry.timestamp).toLocaleTimeString()}</div>
+                  </div>
+                </div>
               </div>
 
               ${entry.observations.length > 0 ? `
-                <div style="font-weight: 600; font-size: 15px; margin-bottom: 10px; padding-bottom: 6px; border-bottom: 2px solid #e5e7eb;">Physical Observations</div>
-                ${entry.observations.map(obs => `
-                  <div class="observation-item">
-                    <div class="observation-header" style="margin-bottom: 8px;">
-                      <span>${obs.bodyArea || 'General'}</span>
+                <div class="detail-section">
+                  <div class="detail-section-title"><span class="section-icon">🔍</span> Physical Observations</div>
+                  ${entry.observations.map(obs => `
+                    <div class="observation-item">
+                      <div class="observation-header" style="margin-bottom: 10px;">
+                        <span style="font-size: 15px;">${obs.bodyArea || 'General'}</span>
+                      </div>
+                      <div class="obs-fields-grid">
+                        ${obs.observation ? `
+                        <div class="obs-field-card full-width">
+                          <div class="obs-field-label">Description</div>
+                          <div class="obs-field-value">${obs.observation}</div>
+                        </div>` : ''}
+                        ${obs.parentKnowledge ? `
+                        <div class="obs-field-card">
+                          <div class="obs-field-label">Parent Knowledge</div>
+                          <div class="obs-field-value">${obs.parentKnowledge}</div>
+                        </div>` : ''}
+                        ${obs.childAware ? `
+                        <div class="obs-field-card">
+                          <div class="obs-field-label">Child Awareness</div>
+                          <div class="obs-field-value">${obs.childAware === 'aware' ? '✓ Aware' : '✗ Unaware'}</div>
+                        </div>` : ''}
+                        ${obs.childExplanation ? `
+                        <div class="obs-field-card full-width">
+                          <div class="obs-field-label">Child Explanation</div>
+                          <div class="obs-field-value">"${obs.childExplanation}"</div>
+                        </div>` : ''}
+                        ${obs.childDemeanorDiscussing && obs.childDemeanorDiscussing.length > 0 ? `
+                        <div class="obs-field-card full-width">
+                          <div class="obs-field-label">Demeanor While Discussing</div>
+                          <div class="obs-field-value">${obs.childDemeanorDiscussing.join(', ')}</div>
+                        </div>` : ''}
+                        ${obs.notes ? `
+                        <div class="obs-field-card full-width">
+                          <div class="obs-field-label">Notes</div>
+                          <div class="obs-field-value">${obs.notes}</div>
+                        </div>` : ''}
+                      </div>
                     </div>
-                    ${obs.observation ? `<div style="margin-bottom: 6px;"><strong style="font-size: 12px; color: #6b7280;">Description:</strong><br>${obs.observation}</div>` : ''}
-                    ${obs.parentKnowledge ? `<div style="margin-bottom: 6px;"><strong style="font-size: 12px; color: #6b7280;">Parent Knowledge:</strong> ${obs.parentKnowledge}</div>` : ''}
-                    ${obs.childAware ? `<div style="margin-bottom: 6px;"><strong style="font-size: 12px; color: #6b7280;">Child Awareness:</strong> ${obs.childAware === 'aware' ? 'Aware' : 'Unaware'}</div>` : ''}
-                    ${obs.childExplanation ? `<div style="margin-bottom: 6px;"><strong style="font-size: 12px; color: #6b7280;">Child Explanation:</strong> "${obs.childExplanation}"</div>` : ''}
-                    ${obs.childDemeanorDiscussing && obs.childDemeanorDiscussing.length > 0 ? `<div style="margin-bottom: 6px;"><strong style="font-size: 12px; color: #6b7280;">Demeanor While Discussing:</strong> ${obs.childDemeanorDiscussing.join(', ')}</div>` : ''}
-                    ${obs.notes ? `<div><strong style="font-size: 12px; color: #6b7280;">Notes:</strong> ${obs.notes}</div>` : ''}
-                  </div>
-                `).join('')}
+                  `).join('')}
+                </div>
               ` : '<div class="entry-meta" style="margin-bottom: 12px;">No observations recorded.</div>'}
 
               ${entry.demeanor.length > 0 ? `
-                <div style="font-weight: 600; font-size: 15px; margin-bottom: 10px; padding-bottom: 6px; border-bottom: 2px solid #e5e7eb;">Overall Demeanor</div>
-                <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px;">
-                  ${entry.demeanor.map(d => `<span style="background: #ecfdf5; color: #065f46; padding: 6px 16px; border-radius: 16px; font-size: 13px; font-weight: 500; border: 1px solid #a7f3d0;">${d}</span>`).join('')}
+                <div class="detail-section">
+                  <div class="detail-section-title"><span class="section-icon">😊</span> Overall Demeanor</div>
+                  <div class="demeanor-tags">
+                    ${entry.demeanor.map(d => `<span class="demeanor-tag">${d}</span>`).join('')}
+                  </div>
                 </div>
               ` : ''}
 
               ${entry.photos.length > 0 ? `
-                <div style="font-weight: 600; font-size: 15px; margin-bottom: 10px; padding-bottom: 6px; border-bottom: 2px solid #e5e7eb;">Photos (${entry.photos.length})</div>
-                <div class="photo-grid">
-                  ${entry.photos.map((photo, idx) => `
-                    <div class="photo-item">
-                      <img src="${photo.data}" alt="Photo ${idx + 1}">
-                      <div class="photo-caption">${photo.name}</div>
-                    </div>
-                  `).join('')}
+                <div class="detail-section">
+                  <div class="detail-section-title"><span class="section-icon">📷</span> Photos (${entry.photos.length})</div>
+                  <div class="photo-grid">
+                    ${entry.photos.map((photo, idx) => `
+                      <div class="photo-item">
+                        <img src="${photo.data}" alt="Photo ${idx + 1}">
+                        <div class="photo-caption">${photo.name}</div>
+                      </div>
+                    `).join('')}
+                  </div>
                 </div>
               ` : ''}
 
               ${entry.additionalObservations ? `
-                <div style="font-weight: 600; font-size: 15px; margin-top: 16px; margin-bottom: 10px; padding-bottom: 6px; border-bottom: 2px solid #e5e7eb;">Additional Observations</div>
-                <div class="quick-notes-section" style="background: #fefce8; border-left-color: #eab308;">${entry.additionalObservations}</div>
+                <div class="detail-section">
+                  <div class="detail-section-title"><span class="section-icon">📝</span> Additional Observations</div>
+                  <div class="quick-notes-section" style="background: #fefce8; border-left-color: #eab308; margin-bottom: 0;">${entry.additionalObservations}</div>
+                </div>
               ` : ''}
 
               <div style="margin-top: 16px; font-size: 12px; color: #6b7280;">
