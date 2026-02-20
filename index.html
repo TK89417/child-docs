@@ -1141,20 +1141,12 @@ body.dark-mode input[type="checkbox"]:checked::before{
               }
             });
           } else {
-            const backupCount = importData.entries.length;
-            const currentCount = state.entries.length;
-            const entryLines = backupCount === currentCount
-              ? [{ text: `Both backup and current data have ${backupCount} entries.` }]
-              : [
-                  { text: `Backup contains ${backupCount} entries.` },
-                  { text: `You currently have ${currentCount} entries.` }
-                ];
+            const entryWord = newEntries.length === 1 ? 'entry' : 'entries';
 
             showConfirmModal({
-              title: 'Ready to import from backup',
+              title: `New ${entryWord} to import`,
               lines: [
-                ...entryLines,
-                { text: `${newEntries.length} new entries will be added.`, highlight: true },
+                { text: `${newEntries.length} new ${entryWord} will be added.`, highlight: true },
                 { text: `Your existing entries will not be changed.`, note: true }
               ],
               onConfirm: () => {
