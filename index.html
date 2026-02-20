@@ -156,16 +156,93 @@
     
     /* Messages */
     .message {
-      padding: 12px;
-      border-radius: 6px;
+      padding: 20px 24px;
+      border-radius: 10px;
       margin-bottom: 12px;
-      font-size: 14px;
+      font-size: 18px;
+      font-weight: 500;
+      text-align: center;
     }
-    
+
     .message-success {
       background: #d1fae5;
       color: #065f46;
-      border: 1px solid #6ee7b7;
+      border: 2px solid #6ee7b7;
+    }
+
+    /* Custom confirm modal */
+    .confirm-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      padding: 20px;
+    }
+
+    .confirm-box {
+      background: #1a1a2e;
+      color: #f0f0f0;
+      border-radius: 16px;
+      padding: 32px 28px;
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    }
+
+    .confirm-box h3 {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      color: #ffffff;
+    }
+
+    .confirm-box p {
+      font-size: 15px;
+      line-height: 1.7;
+      margin-bottom: 6px;
+      color: #c8c8d4;
+    }
+
+    .confirm-box .confirm-highlight {
+      font-weight: 600;
+      color: #a5b4fc;
+    }
+
+    .confirm-box .confirm-note {
+      font-size: 13px;
+      color: #9ca3af;
+      margin-top: 12px;
+      font-style: italic;
+    }
+
+    .confirm-buttons {
+      display: flex;
+      gap: 12px;
+      margin-top: 28px;
+    }
+
+    .confirm-buttons button {
+      flex: 1;
+      padding: 12px 16px;
+      border-radius: 10px;
+      border: none;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .confirm-btn-cancel {
+      background: #374151;
+      color: #d1d5db;
+    }
+
+    .confirm-btn-ok {
+      background: #2563eb;
+      color: white;
     }
     
     .message-error {
@@ -794,9 +871,43 @@ body.dark-mode input[type="checkbox"]:checked::before{
       setTimeout(() => {
         state.message = '';
         render();
-      }, 3000);
+      }, 5000);
     }
-    
+
+    // Custom confirm modal (replaces native confirm())
+    function showConfirmModal({ title, lines, onConfirm }) {
+      const overlay = document.createElement('div');
+      overlay.className = 'confirm-overlay';
+
+      const linesHtml = lines.map(l => {
+        if (l.note) return `<p class="confirm-note">${l.text}</p>`;
+        if (l.highlight) return `<p class="confirm-highlight">${l.text}</p>`;
+        return `<p>${l.text}</p>`;
+      }).join('');
+
+      overlay.innerHTML = `
+        <div class="confirm-box">
+          <h3>${title}</h3>
+          ${linesHtml}
+          <div class="confirm-buttons">
+            <button class="confirm-btn-cancel" id="confirm-cancel">Cancel</button>
+            <button class="confirm-btn-ok" id="confirm-ok">Import</button>
+          </div>
+        </div>
+      `;
+
+      document.body.appendChild(overlay);
+
+      document.getElementById('confirm-ok').onclick = () => {
+        document.body.removeChild(overlay);
+        onConfirm();
+      };
+
+      document.getElementById('confirm-cancel').onclick = () => {
+        document.body.removeChild(overlay);
+      };
+    }
+
     // Voice recognition
     function initVoiceRecognition() {
       if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
@@ -1010,26 +1121,27 @@ body.dark-mode input[type="checkbox"]:checked::before{
           const existingIds = new Set(state.entries.map(e => e.id));
           const newEntries = importData.entries.filter(e => !existingIds.has(e.id));
 
-          const proceed = confirm(
-            `Ready to import from backup.\n\n` +
-            `Backup contains ${importData.entries.length} entries.\n` +
-            `You currently have ${state.entries.length} entries.\n` +
-            `${newEntries.length} new entries will be added.\n\n` +
-            `Your existing entries will not be changed.`
-          );
+          showConfirmModal({
+            title: 'Ready to import from backup',
+            lines: [
+              { text: `Backup contains ${importData.entries.length} entries.` },
+              { text: `You currently have ${state.entries.length} entries.` },
+              { text: `${newEntries.length} new entries will be added.`, highlight: true },
+              { text: `Your existing entries will not be changed.`, note: true }
+            ],
+            onConfirm: () => {
+              state.entries = [...state.entries, ...newEntries];
+              if (newEntries.length > 0) {
+                showMessage(`✓ Imported ${newEntries.length} new entries. You now have ${state.entries.length} total.`);
+              } else {
+                showMessage(`All entries from this backup already exist. Nothing new to add. ✅`);
+              }
 
-          if (!proceed) return;
-
-          state.entries = [...state.entries, ...newEntries];
-          if (newEntries.length > 0) {
-            showMessage(`✓ Imported ${newEntries.length} new entries. You now have ${state.entries.length} total.`);
-          } else {
-            showMessage(`All entries from this backup already exist. Nothing new to add.`);
-          }
-
-          saveEntries();
-          state.view = 'list';
-          render();
+              saveEntries();
+              state.view = 'list';
+              render();
+            }
+          });
         } catch (err) {
           console.error('Import error:', err);
           showMessage('Failed to import: Invalid file format', 'error');
