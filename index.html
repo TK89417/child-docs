@@ -1150,7 +1150,7 @@ body.dark-mode input[type="checkbox"]:checked::before{
               ],
               onConfirm: () => {
                 state.entries = [...state.entries, ...newEntries];
-                showMessage(`Imported ${newEntries.length} new entries. ✅<br>You now have ${state.entries.length} total. 📄`);
+                showMessage(`Imported ${newEntries.length} new entries. ✅<br><div style="margin-top:0.5em"></div>You now have ${state.entries.length} total. 📄`);
                 saveEntries();
                 state.view = 'list';
                 render();
