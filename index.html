@@ -1131,14 +1131,13 @@ body.dark-mode input[type="checkbox"]:checked::before{
 
           if (newEntries.length === 0) {
             showConfirmModal({
-              title: 'No new entries',
+              title: 'Nothing new to import ✅',
               lines: [
-                { text: `All ${importData.entries.length} entries from this backup already exist.` },
-                { text: `Nothing new to add.`, highlight: true }
+                { text: `All ${importData.entries.length} entries from this backup already exist.` }
               ],
               okayOnly: true,
               onConfirm: () => {
-                showMessage(`No new entries to import. ✅<br>📄 You still have ${state.entries.length} total.`);
+                showMessage(`You have ${state.entries.length} total entries. 📄`);
               }
             });
           } else {
