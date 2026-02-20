@@ -1146,12 +1146,11 @@ body.dark-mode input[type="checkbox"]:checked::before{
             showConfirmModal({
               title: `New ${entryWord} to import`,
               lines: [
-                { text: `${newEntries.length} new ${entryWord} will be added.`, highlight: true },
-                { text: `Your existing entries will not be changed.`, note: true }
+                { text: `${newEntries.length} new ${entryWord} will be added.`, highlight: true }
               ],
               onConfirm: () => {
                 state.entries = [...state.entries, ...newEntries];
-                showMessage(`Imported ${newEntries.length} new entries. ✅<br>📄 You now have ${state.entries.length} total.`);
+                showMessage(`Imported ${newEntries.length} new entries. ✅<br>You now have ${state.entries.length} total. 📄`);
                 saveEntries();
                 state.view = 'list';
                 render();
