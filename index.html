@@ -871,7 +871,7 @@ body.dark-mode input[type="checkbox"]:checked::before{
       setTimeout(() => {
         state.message = '';
         render();
-      }, 5000);
+      }, 8000);
     }
 
     // Custom confirm modal (replaces native confirm())
@@ -1136,20 +1136,31 @@ body.dark-mode input[type="checkbox"]:checked::before{
                 { text: `All ${importData.entries.length} entries from this backup already exist.` },
                 { text: `Nothing new to add.`, highlight: true }
               ],
-              okayOnly: true
+              okayOnly: true,
+              onConfirm: () => {
+                showMessage(`No new entries to import. ✅<br>📄 You still have ${state.entries.length} total.`);
+              }
             });
           } else {
+            const backupCount = importData.entries.length;
+            const currentCount = state.entries.length;
+            const entryLines = backupCount === currentCount
+              ? [{ text: `Both backup and current data have ${backupCount} entries.` }]
+              : [
+                  { text: `Backup contains ${backupCount} entries.` },
+                  { text: `You currently have ${currentCount} entries.` }
+                ];
+
             showConfirmModal({
               title: 'Ready to import from backup',
               lines: [
-                { text: `Backup contains ${importData.entries.length} entries.` },
-                { text: `You currently have ${state.entries.length} entries.` },
+                ...entryLines,
                 { text: `${newEntries.length} new entries will be added.`, highlight: true },
                 { text: `Your existing entries will not be changed.`, note: true }
               ],
               onConfirm: () => {
                 state.entries = [...state.entries, ...newEntries];
-                showMessage(`Imported ${newEntries.length} new entries. You now have ${state.entries.length} total.`);
+                showMessage(`Imported ${newEntries.length} new entries. ✅<br>📄 You now have ${state.entries.length} total.`);
                 saveEntries();
                 state.view = 'list';
                 render();
